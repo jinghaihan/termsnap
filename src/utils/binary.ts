@@ -1,7 +1,7 @@
-import { arch, platform } from 'node:os'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'pathe'
+import { dirname } from 'pathe'
+import { getBinaryPath as downloadBinaryPath, getPackageVersion } from './binary-downloader'
 
 // Get the directory of the current module
 const __filename = fileURLToPath(import.meta.url)
@@ -10,32 +10,13 @@ const __dirname = dirname(__filename)
 /**
  * Get the appropriate binary path for the current platform
  */
-export function getBinaryPath(): string {
-  const platformName = platform()
-  const archName = arch()
+export async function getBinaryPath(): Promise<string> {
+  // This function is only used in production mode
+  // In development mode, we use 'go run main.go' directly
 
-  let binaryName: string
-
-  if (platformName === 'darwin') {
-    binaryName = archName === 'arm64' ? 'termsnap-darwin-arm64' : 'termsnap-darwin-x64'
-  }
-  else if (platformName === 'linux') {
-    binaryName = archName === 'arm64' ? 'termsnap-linux-arm64' : 'termsnap-linux-x64'
-  }
-  else if (platformName === 'win32') {
-    binaryName = 'termsnap-win32-x64.exe'
-  }
-  else {
-    throw new Error(`Unsupported platform: ${platformName}`)
-  }
-
-  // Path to the binary relative to the package root
-  // When running from dist/, need to go up one more level
-  const isRunningFromDist = __dirname.includes('dist')
-  const relativePath = isRunningFromDist ? ['..', 'binaries', binaryName] : ['binaries', binaryName]
-  const binaryPath = join(__dirname, ...relativePath)
-
-  return binaryPath
+  // Download from GitHub Release
+  const version = getPackageVersion()
+  return await downloadBinaryPath(version)
 }
 
 /**
@@ -55,7 +36,7 @@ export function isDevelopmentMode(): boolean {
 /**
  * Get the appropriate command and args for running the Go server
  */
-export function getGoServerCommand(port: number): { command: string, args: string[] } {
+export async function getGoServerCommand(port: number): Promise<{ command: string, args: string[] }> {
   if (isDevelopmentMode()) {
     // In development, use go run
     return {
@@ -65,7 +46,7 @@ export function getGoServerCommand(port: number): { command: string, args: strin
   }
   else {
     // In production, use pre-compiled binary
-    const binaryPath = getBinaryPath()
+    const binaryPath = await getBinaryPath()
     return {
       command: binaryPath,
       args: ['--port', port.toString()],

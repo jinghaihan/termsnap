@@ -9,12 +9,65 @@ on:
       - 'v*'
 
 jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: amd64
+            binary_name: termsnap-linux-x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: arm64
+            binary_name: termsnap-linux-arm64
+          - os: macos-latest
+            platform: darwin
+            arch: amd64
+            binary_name: termsnap-darwin-x64
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
+            binary_name: termsnap-darwin-arm64
+          - os: windows-latest
+            platform: windows
+            arch: amd64
+            binary_name: termsnap-win32-x64.exe
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+
+      - name: Build binary
+        run: |
+          GOOS=${{ matrix.platform }} GOARCH=${{ matrix.arch }} go build -o ${{ matrix.binary_name }} main.go
+          chmod +x ${{ matrix.binary_name }}
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.binary_name }}
+          path: ${{ matrix.binary_name }}
+
   release:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Download all binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: binaries
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3
@@ -24,6 +77,38 @@ jobs:
         with:
           node-version: lts/*
 
-      - run: npx changelogithub
+      - name: Create Release
+        run: |
+          # Check if this is a beta/alpha version
+          if [[ "${{ github.ref_name }}" == *"alpha"* ]] || [[ "${{ github.ref_name }}" == *"beta"* ]]; then
+            echo "Beta/Alpha version detected, creating draft release"
+            # Create a draft release for testing (not visible to followers)
+            gh release create ${{ github.ref_name }} \
+              --title "termsnap ${{ github.ref_name }}" \
+              --notes "Beta/Alpha release for testing" \
+              --draft \
+              --prerelease
+          else
+            echo "Production release, creating public release"
+            # Use changelogithub for production releases
+            npx changelogithub
+          fi
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Upload binaries to release
+        run: |
+          # Get the latest release
+          RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/latest --jq .id)
+
+          # Upload each binary
+          for binary in binaries/*; do
+            if [ -f "$binary" ]; then
+              echo "Uploading $binary to release $RELEASE_ID"
+              gh api repos/${{ github.repository }}/releases/$RELEASE_ID/assets \
+                -F name="$(basename $binary)" \
+                -F file=@"$binary"
+            fi
+          done
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

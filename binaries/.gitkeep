@@ -1,0 +1,2 @@
+# This file ensures the binaries directory is included in the npm package
+# Binary files will be downloaded here at runtime 

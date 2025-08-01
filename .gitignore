@@ -4,7 +4,8 @@ node_modules/
 
 # Build outputs
 dist/
-binaries/
+binaries/*
+!binaries/.gitkeep
 
 # Environment variables
 .env

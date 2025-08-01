@@ -8,7 +8,7 @@
 Creates beautiful screenshots of terminal command output with full local font and emoji support.
 
 ```sh
-lolcat -f <(figlet -f banner3 tremsnap)
+npx termsnap lolcat -f <(figlet -f banner3 tremsnap)
 ```
 
 <p align='center'>
@@ -28,20 +28,20 @@ This project leverages Go-based terminal output proxy combined with web renderin
 
 ```sh
 # Browser preview
-npx termsnap "ls -la" --open
+npx termsnap "command" --open
 
 # Save as HTML file
-npx termsnap "git status" --html index.html
+npx termsnap "command" --html index.html
 
 # Save as screenshot
-npx termsnap "docker ps" --screenshot image.png
+npx termsnap "command" --screenshot image.png
 
-# Custom theme
-npx termsnap "node --version" --open --theme vitesse-light
+# Custom theme and decoration
+npx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/decoration.png' width='500'/>
+<img src='./assets/decoration.png' width='400'/>
 </p>
 
 ## Output Formats

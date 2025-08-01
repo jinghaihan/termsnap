@@ -90,13 +90,8 @@ export async function ensurePortReleased(port: number, goProcess: ResultPromise 
     }
   }
 
-  // Then kill any remaining processes on the port
   await killExistingProcesses(port)
-
-  // Additional cleanup: kill any termsnap processes that might be lingering
   await killProcessesByPattern('termsnap', 'termsnap process')
-
-  // Additional cleanup: kill any Go processes that might be lingering
   await killProcessesByPattern('main', 'Go process')
 }
 

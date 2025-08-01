@@ -266,7 +266,6 @@ export class ScreenshotManager {
           polling: 100, // Check every 100ms
         })
 
-        // If we get here, terminal is ready
         p.log.success(`Terminal ready after ${attempt} attempts`)
         return
       }
