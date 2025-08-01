@@ -1,0 +1,95 @@
+{
+  "name": "termsnap",
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.13.1",
+  "description": "Creates beautiful screenshots based on terminal command output.",
+  "author": "jinghaihan",
+  "license": "MIT",
+  "homepage": "https://github.com/jinghaihan/termsnap#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinghaihan/termsnap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jinghaihan/termsnap/issues"
+  },
+  "keywords": [
+    "terminal",
+    "screenshot"
+  ],
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./cli": "./dist/cli.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "termsnap": "./bin/termsnap.mjs"
+  },
+  "files": [
+    "bin",
+    "binaries",
+    "dist"
+  ],
+  "scripts": {
+    "termsnap": "NODE_ENV=development tsx ./src/cli.ts",
+    "termsnap:prod": "tsx ./src/cli.ts",
+    "build": "unbuild",
+    "build:go": "npm run build:go:darwin && npm run build:go:linux && npm run build:go:windows",
+    "build:go:darwin": "GOOS=darwin GOARCH=amd64 go build -o binaries/termsnap-darwin-x64 main.go && GOOS=darwin GOARCH=arm64 go build -o binaries/termsnap-darwin-arm64 main.go",
+    "build:go:linux": "GOOS=linux GOARCH=amd64 go build -o binaries/termsnap-linux-x64 main.go && GOOS=linux GOARCH=arm64 go build -o binaries/termsnap-linux-arm64 main.go",
+    "build:go:windows": "GOOS=windows GOARCH=amd64 go build -o binaries/termsnap-win32-x64.exe main.go",
+    "prebuild": "npm run build:go",
+    "build:go:script": "bash scripts/build.sh",
+    "test:env": "tsx scripts/test-env.ts",
+    "verify": "pnpm test:env",
+    "typecheck": "tsc",
+    "test": "vitest",
+    "lint": "eslint",
+    "commit": "czg",
+    "deps": "taze major -I",
+    "release": "bumpp && pnpm publish --no-git-checks",
+    "catalog": "pncat",
+    "prepare": "npx simple-git-hooks",
+    "bootstrap": "pnpm install",
+    "preinstall": "npx only-allow pnpm",
+    "prepublishOnly": "pnpm build && pnpm build:go"
+  },
+  "dependencies": {
+    "@clack/prompts": "catalog:node",
+    "@types/puppeteer": "catalog:types",
+    "ansi-parser": "catalog:utils",
+    "ansis": "catalog:node",
+    "cac": "catalog:node",
+    "execa": "catalog:node",
+    "pathe": "catalog:node",
+    "puppeteer": "catalog:prod",
+    "unconfig": "catalog:node",
+    "ws": "catalog:network"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:lint",
+    "@types/node": "catalog:types",
+    "@types/ws": "catalog:network",
+    "bumpp": "catalog:cli",
+    "czg": "catalog:cli",
+    "eslint": "catalog:lint",
+    "lint-staged": "catalog:lint",
+    "pncat": "catalog:cli",
+    "simple-git-hooks": "catalog:lint",
+    "taze": "catalog:cli",
+    "tsx": "catalog:script",
+    "typescript": "catalog:dev",
+    "unbuild": "catalog:build",
+    "vitest": "catalog:test"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
