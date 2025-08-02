@@ -1,7 +1,7 @@
 {
   "name": "termsnap",
   "type": "module",
-  "version": "0.1.1-beta.5",
+  "version": "0.1.1",
   "packageManager": "pnpm@10.14.0",
   "description": "Creates beautiful screenshots based on terminal command output.",
   "author": "jinghaihan",
