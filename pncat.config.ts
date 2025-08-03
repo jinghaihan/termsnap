@@ -5,12 +5,10 @@ export default defineConfig({
     {
       name: 'network',
       match: [/ws/],
-      priority: 0,
     },
     {
       name: 'utils',
       match: [/ansi-parser/],
-      priority: 0,
     },
   ]),
 })

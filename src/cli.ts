@@ -19,21 +19,6 @@ import { checkPortStatus, ensurePortReleased, killExistingProcesses } from './ut
 import { restoreTerminal, setupTerminal } from './utils/terminal'
 import { TerminalWebSocketClient } from './websocket-client'
 
-// Function to handle user input
-function handleUserInput(wsClient: TerminalWebSocketClient) {
-  process.stdin.on('data', (data: Buffer) => {
-    const input = data.toString()
-
-    // Send input to Go server
-    const inputMessage: WebSocketMessage = {
-      type: 'input',
-      data: input,
-      timestamp: Date.now(),
-    }
-    wsClient.send(inputMessage)
-  })
-}
-
 try {
   const cli: CAC = cac('termsnap')
 
@@ -65,7 +50,8 @@ try {
       const config = await resolveConfig(options)
 
       const port = Number.parseInt(config.port || '3000', 10)
-      // Check if need to output HTML
+
+      // Check if need to output HTML or screenshot
       const outputHTML = !!config.html
       const outputScreenshot = !!config.screenshot
       const openBrowser = config.open || (!outputHTML && !outputScreenshot)
@@ -176,12 +162,7 @@ try {
           }
 
           if (outputHTML) {
-            p.log.info(`Generating ${c.cyan`HTML template`} to ${c.yellow`${config.html}`}...`)
-            HTMLTemplateGenerator.saveToFile(generateOptions, config.html)
-            p.log.success(`HTML template saved to ${c.yellow`${config.html}`}`)
-          }
-          else {
-            HTMLTemplateGenerator.generateHTML(generateOptions)
+            await HTMLTemplateGenerator.saveToFile(generateOptions, config.html)
           }
 
           // Generate screenshot if requested
@@ -322,4 +303,19 @@ try {
 catch (error) {
   p.log.error(`CLI error: ${c.red`${error}`}`)
   process.exit(1)
+}
+
+// Function to handle user input
+function handleUserInput(wsClient: TerminalWebSocketClient) {
+  process.stdin.on('data', (data: Buffer) => {
+    const input = data.toString()
+
+    // Send input to Go server
+    const inputMessage: WebSocketMessage = {
+      type: 'input',
+      data: input,
+      timestamp: Date.now(),
+    }
+    wsClient.send(inputMessage)
+  })
 }

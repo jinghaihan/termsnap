@@ -65,7 +65,7 @@
     "@antfu/eslint-config": "catalog:lint",
     "@types/node": "catalog:types",
     "@types/puppeteer": "catalog:types",
-    "@types/ws": "catalog:network",
+    "@types/ws": "catalog:types",
     "bumpp": "catalog:cli",
     "czg": "catalog:cli",
     "eslint": "catalog:lint",

@@ -40,9 +40,6 @@ catalogs:
       specifier: ^2.13.1
       version: 2.13.1
   network:
-    '@types/ws':
-      specifier: ^8.18.1
-      version: 8.18.1
     ws:
       specifier: ^8.18.3
       version: 8.18.3
@@ -84,6 +81,9 @@ catalogs:
     '@types/puppeteer':
       specifier: ^7.0.4
       version: 7.0.4
+    '@types/ws':
+      specifier: ^8.18.1
+      version: 8.18.1
   utils:
     ansi-parser:
       specifier: ^3.2.11
@@ -131,7 +131,7 @@ importers:
         specifier: catalog:types
         version: 7.0.4(typescript@5.9.2)
       '@types/ws':
-        specifier: catalog:network
+        specifier: catalog:types
         version: 8.18.1
       bumpp:
         specifier: catalog:cli

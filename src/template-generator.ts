@@ -235,8 +235,9 @@ export class HTMLTemplateGenerator {
   }
 
   static async saveToFile(options: HTMLTemplateOptions, outputPath: string = 'index.html'): Promise<string> {
-    const html = await this.generateHTML(options)
     const fullPath = join(process.cwd(), outputPath)
+    p.log.info(`Generating ${c.cyan`HTML template`} to ${c.yellow`${outputPath}`}...`)
+    const html = await this.generateHTML(options)
     writeFileSync(fullPath, html, 'utf8')
     p.log.success(`HTML template saved to: ${c.yellow`${fullPath}`}`)
     return html

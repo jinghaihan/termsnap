@@ -8,7 +8,7 @@
 Creates beautiful screenshots of terminal command output with full local font and emoji support.
 
 ```sh
-npx termsnap lolcat -f <(figlet -f banner3 tremsnap)
+pnpx termsnap lolcat -f <(figlet -f banner3 tremsnap)
 ```
 
 <p align='center'>
@@ -28,20 +28,20 @@ This project leverages Go-based terminal output proxy combined with web renderin
 
 ```sh
 # Browser preview
-npx termsnap "command" --open
+pnpx termsnap "command" --open
 
 # Save as HTML file
-npx termsnap "command" --html index.html
+pnpx termsnap "command" --html index.html
 
 # Save as screenshot
-npx termsnap "command" --screenshot image.png
+pnpx termsnap "command" --screenshot image.png
 
 # Custom theme and decoration
-npx termsnap "command" --open --theme vitesse-light --decoration
+pnpx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/pncat.png' />
+<img src='./assets/pncat-r.png' />
 </p>
 
 ## Output Formats
@@ -55,6 +55,8 @@ Generate your terminal output in multiple formats:
 ## Known Issues
 
 In some cases, especially with custom fonts, width and height calculations may be inaccurate. When this occurs, you can manually set the `height` and `width` parameters to force specific viewport dimensions.
+
+When setting `lineHeight` greater than 1, box drawing characters may appear discontinuous with gaps between adjacent lines due to limitations in xterm.js rendering.
 
 ## Theme Customization
 
@@ -70,7 +72,7 @@ You can use any theme from the [iTerm2-Color-Schemes](https://github.com/mbadola
 
 ```sh
 # Use a remote theme (e.g., 0x96f)
-npx termsnap "command" --theme "0x96f"
+pnpx termsnap "command" --theme "0x96f"
 ```
 
 ## Configuration Options
