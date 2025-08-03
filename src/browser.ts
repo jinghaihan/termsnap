@@ -52,7 +52,7 @@ export class BrowserManager {
         server.on('error', reject)
       })
 
-      p.log.info(`Opening ${c.cyan`broz`} browser with calculated content size ${c.yellow`${width}x${height}`}...`)
+      p.log.info(`Opening ${c.cyan`Broz`} browser with calculated content size ${c.yellow`${width}x${height}`}...`)
 
       // Launch broz with the local server URL
       await execa(

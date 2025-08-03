@@ -61,8 +61,17 @@ In some cases, especially with custom fonts, width and height calculations may b
 termsnap supports `termsnap.config.ts` for persistent configuration and theme customization. You can:
 
 - Use built-in themes (vitesse, catppuccin, dracula)
+- Use remote themes from [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes) VSCode directory
 - Create custom themes in `termsnap.config.ts`
-- Find inspiration from [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+
+### Remote Themes
+
+You can use any theme from the [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes) VSCode directory. If the theme name is not in the built-in list, termsnap will automatically attempt to download it from the repository:
+
+```sh
+# Use a remote theme (e.g., 0x96f)
+npx termsnap "command" --theme "0x96f"
+```
 
 ## Configuration Options
 

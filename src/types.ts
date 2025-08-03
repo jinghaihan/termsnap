@@ -1,8 +1,10 @@
-import type { CDN_CHOICES, IMAGE_FORMAT_CHOICES } from './constants'
+import type { CDN_CHOICES, IMAGE_FORMAT_CHOICES, THEME_CHOICES } from './constants'
 
 export type CdnProvider = (typeof CDN_CHOICES)[number]
 
 export type ImageFormat = (typeof IMAGE_FORMAT_CHOICES)[number]
+
+export type BuiltInTheme = (typeof THEME_CHOICES)[number]
 
 export interface CommandOptions extends CommonOptions, StyleOptions {}
 
@@ -246,4 +248,35 @@ export interface TerminalConfig {
   brightWhite?: string
   /** ANSI extended colors (16-255) */
   extendedAnsi?: string[]
+}
+
+/**
+ * VSCode terminal color configuration format
+ */
+export interface VscodeTerminalConfig {
+  'workbench.colorCustomizations'?: VscodeWorkbenchColors
+}
+
+export interface VscodeWorkbenchColors {
+  'terminal.foreground'?: string
+  'terminal.background'?: string
+  'terminal.ansiBlack'?: string
+  'terminal.ansiBlue'?: string
+  'terminal.ansiCyan'?: string
+  'terminal.ansiGreen'?: string
+  'terminal.ansiMagenta'?: string
+  'terminal.ansiRed'?: string
+  'terminal.ansiWhite'?: string
+  'terminal.ansiYellow'?: string
+  'terminal.ansiBrightBlack'?: string
+  'terminal.ansiBrightBlue'?: string
+  'terminal.ansiBrightCyan'?: string
+  'terminal.ansiBrightGreen'?: string
+  'terminal.ansiBrightMagenta'?: string
+  'terminal.ansiBrightRed'?: string
+  'terminal.ansiBrightWhite'?: string
+  'terminal.ansiBrightYellow'?: string
+  'terminal.selectionBackground'?: string
+  'terminalCursor.background'?: string
+  'terminalCursor.foreground'?: string
 }

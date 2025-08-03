@@ -1,11 +1,11 @@
 #!/usr/bin/env tsx
 
 import { mkdir } from 'node:fs/promises'
-import { join } from 'node:path'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
+import { join } from 'pathe'
 
 async function buildGo() {
   p.log.info(`${c.cyan`Building Go binaries for all platforms...`}`)
