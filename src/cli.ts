@@ -121,6 +121,9 @@ try {
         // Start Go server process using pre-compiled binary
         p.log.info(`Starting ${c.cyan`Go WebSocket server`} on port ${c.yellow`${port}`}...`)
         const { command: goCommand, args: goArgs } = await getGoServerCommand(port)
+
+        // Re-setup terminal after potential binary download (which may have used spinner)
+        setupTerminal()
         goProcess = execa(goCommand, goArgs, {
           stdio: ['pipe', 'pipe', 'pipe'],
           env: { ...process.env, PORT: port.toString() },
