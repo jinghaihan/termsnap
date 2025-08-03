@@ -5,7 +5,7 @@ import c from 'ansis'
 import { execa } from 'execa'
 
 /**
- * Generic function to kill processes by pattern
+ * Generic function to kill processes by pattern with more precise matching
  */
 async function killProcessesByPattern(pattern: string, processName: string, excludeCurrentPid = true) {
   try {
@@ -15,11 +15,20 @@ async function killProcessesByPattern(pattern: string, processName: string, excl
       for (const pid of pids) {
         if (pid && (!excludeCurrentPid || pid !== process.pid.toString())) {
           try {
-            await execa('kill', ['-9', pid], { reject: false })
-            p.log.info(`Killed lingering ${c.cyan`${processName}`} ${c.yellow`${pid}`}`)
+            // Check if this process is actually related to termsnap before killing
+            const processInfoResult = await execa('ps', ['-p', pid, '-o', 'args='], { reject: false })
+            const processArgs = processInfoResult.stdout?.trim() || ''
+
+            // Only kill if it's definitely a termsnap-related process
+            if (processArgs.includes('termsnap')
+              || (processArgs.includes('main.go') && processArgs.includes('--port'))
+              || (processArgs.includes('main') && processArgs.includes('--port'))) {
+              await execa('kill', ['-9', pid], { reject: false })
+              p.log.info(`Killed lingering ${c.cyan`${processName}`} ${c.yellow`${pid}`}`)
+            }
           }
           catch {
-            // Ignore errors
+            // Ignore errors - process might have already exited
           }
         }
       }
@@ -31,7 +40,7 @@ async function killProcessesByPattern(pattern: string, processName: string, excl
 }
 
 /**
- * Generic function to kill processes by port
+ * Generic function to kill processes by port with better validation
  */
 async function killProcessesByPort(port: number) {
   try {
@@ -42,11 +51,15 @@ async function killProcessesByPort(port: number) {
         for (const pid of pids) {
           if (pid) {
             try {
-              await execa('kill', ['-9', pid], { reject: false })
-              p.log.info(`Killed process ${c.cyan`${pid}`} using port ${c.yellow`${port}`}`)
+              // Verify this is actually using our port before killing
+              const portCheckResult = await execa('lsof', ['-p', pid, '-a', '-i', `:${port}`], { reject: false })
+              if (portCheckResult.stdout) {
+                await execa('kill', ['-9', pid], { reject: false })
+                p.log.info(`Killed process ${c.cyan`${pid}`} using port ${c.yellow`${port}`}`)
+              }
             }
             catch {
-              // Ignore errors
+              // Ignore errors - process might have already exited
             }
           }
         }
@@ -70,6 +83,7 @@ export async function killExistingProcesses(port: number) {
 
 /**
  * Ensure port is released and Go process is properly terminated
+ * More conservative approach to avoid killing unrelated processes
  */
 export async function ensurePortReleased(port: number, goProcess: ResultPromise | null) {
   // First, try to gracefully terminate the Go process
@@ -90,9 +104,14 @@ export async function ensurePortReleased(port: number, goProcess: ResultPromise 
     }
   }
 
+  // Only clean up processes related to the specific port
   await killExistingProcesses(port)
-  await killProcessesByPattern('termsnap', 'termsnap process')
-  await killProcessesByPattern('main', 'Go process')
+
+  // More conservative pattern matching - only kill termsnap processes with port argument
+  await killProcessesByPattern(`termsnap.*--port.*${port}`, 'termsnap process')
+
+  // Only kill main processes that have the specific port argument
+  await killProcessesByPattern(`main.*--port.*${port}`, 'Go process')
 }
 
 /**

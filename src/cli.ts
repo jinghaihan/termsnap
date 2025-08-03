@@ -68,6 +68,7 @@ try {
       // Check if need to output HTML
       const outputHTML = !!config.html
       const outputScreenshot = !!config.screenshot
+      const openBrowser = config.open || (!outputHTML && !outputScreenshot)
 
       let goProcess: ResultPromise | null = null
       let wsClient: TerminalWebSocketClient | null = null
@@ -186,7 +187,7 @@ try {
           }
 
           // Open in broz if --open is true
-          if (config.open) {
+          if (openBrowser) {
             await BrowserManager.openInBroz(generateOptions, port)
           }
         }

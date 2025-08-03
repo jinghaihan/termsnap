@@ -1,5 +1,4 @@
 import { access, chmod, constants, mkdir, rm } from 'node:fs/promises'
-import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import * as p from '@clack/prompts'
 import c from 'ansis'
@@ -46,7 +45,7 @@ function getBinaryInfo(version: string): BinaryInfo {
 }
 
 /**
- * Download binary from GitHub Release
+ * Download binary from GitHub Release with progress and timeout handling
  */
 async function downloadBinary(binaryInfo: BinaryInfo): Promise<void> {
   const { url, path, name } = binaryInfo
@@ -57,12 +56,51 @@ async function downloadBinary(binaryInfo: BinaryInfo): Promise<void> {
 
   p.log.info(`Downloading ${c.yellow`${name}`} from GitHub Release...`)
 
+  // Create a spinner for progress indication
+  const spinner = p.spinner()
+  spinner.start('Downloading binary...')
+
   try {
-    // Use curl to download the binary
-    const { stderr } = await execa('curl', ['-L', '-o', path, url], {
+    // Use curl with progress bar and timeout settings
+    const curlArgs = [
+      '-L', // Follow redirects
+      '-o',
+      path, // Output file
+      '--progress-bar', // Show progress bar
+      '--max-time',
+      '300', // Maximum 5 minutes timeout
+      '--connect-timeout',
+      '30', // Connection timeout 30 seconds
+      '--retry',
+      '3', // Retry 3 times on failure
+      '--retry-delay',
+      '2', // Wait 2 seconds between retries
+      '--retry-max-time',
+      '600', // Maximum total retry time 10 minutes
+      '--fail', // Fail on HTTP errors
+      url,
+    ]
+
+    const curlProcess = execa('curl', curlArgs, {
       reject: false,
       stderr: 'pipe',
     })
+
+    // Set up timeout handling
+    const timeoutId = setTimeout(() => {
+      spinner.stop('Download timed out')
+      curlProcess.kill('SIGTERM')
+    }, 10 * 60 * 1000) // 10 minutes total timeout
+
+    const { exitCode, stderr } = await curlProcess
+    clearTimeout(timeoutId)
+
+    if (exitCode !== 0) {
+      spinner.stop('Download failed')
+      throw new Error(`curl failed with exit code ${exitCode}: ${stderr || 'Unknown error'}`)
+    }
+
+    spinner.stop('Download completed')
 
     // Check if download was successful
     try {
@@ -71,9 +109,11 @@ async function downloadBinary(binaryInfo: BinaryInfo): Promise<void> {
       if (stats.size === 0) {
         throw new Error('Downloaded file is empty')
       }
+
+      p.log.info(`Downloaded ${c.yellow`${name}`} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`)
     }
-    catch {
-      throw new Error(`Failed to download: ${stderr || 'Unknown error'}`)
+    catch (error: unknown) {
+      throw new Error(`Failed to verify download: ${error}`)
     }
 
     // Set execute permissions
@@ -81,18 +121,54 @@ async function downloadBinary(binaryInfo: BinaryInfo): Promise<void> {
 
     p.log.success(`Successfully downloaded and installed ${c.yellow`${name}`}`)
   }
-  catch (error) {
+  catch (error: unknown) {
+    // Clean up partial download
+    try {
+      await access(path, constants.F_OK)
+      await rm(path, { force: true })
+    }
+    catch {
+      // Ignore cleanup errors
+    }
+
     p.log.error(`Failed to download ${c.yellow`${name}`} from ${c.yellow`${url}`}`)
-    p.log.error(`This might be because:`)
-    p.log.error(`1. GitHub Release v${version} doesn't exist yet`)
-    p.log.error(`2. Binary file ${name} is not available in the release`)
-    p.log.error(`3. Network connectivity issues`)
-    p.log.error(``)
-    p.log.error(`Please ensure that:`)
-    p.log.error(`1. A GitHub Release with tag v${version} exists`)
-    p.log.error(`2. The release contains the binary file: ${name}`)
-    p.log.error(`3. You have internet connectivity`)
-    throw new Error(`Download failed: ${error}`)
+
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorDetails: string[] = []
+
+    if (errorMessage.includes('timed out') || errorMessage.includes('timeout')) {
+      errorDetails.push('Download timed out. This might be due to:')
+      errorDetails.push('1. Slow network connection')
+      errorDetails.push('2. Large binary file size')
+      errorDetails.push('3. Network connectivity issues')
+      errorDetails.push('')
+      errorDetails.push('Please try running the command again with a better network connection.')
+    }
+    else if (errorMessage.includes('curl failed')) {
+      errorDetails.push('Network download failed. This might be because:')
+      errorDetails.push(`1. GitHub Release v${version} doesn't exist yet`)
+      errorDetails.push(`2. Binary file ${name} is not available in the release`)
+      errorDetails.push('3. Network connectivity issues')
+      errorDetails.push('4. GitHub servers are temporarily unavailable')
+    }
+    else {
+      errorDetails.push('This might be because:')
+      errorDetails.push(`1. GitHub Release v${version} doesn't exist yet`)
+      errorDetails.push(`2. Binary file ${name} is not available in the release`)
+      errorDetails.push('3. Network connectivity issues')
+    }
+
+    errorDetails.push('')
+    errorDetails.push('Please ensure that:')
+    errorDetails.push(`1. A GitHub Release with tag v${version} exists`)
+    errorDetails.push(`2. The release contains the binary file: ${name}`)
+    errorDetails.push('3. You have internet connectivity')
+    errorDetails.push('')
+    errorDetails.push('If the problem persists, please try running the command again.')
+
+    p.log.error(errorDetails.join('\n'))
+
+    throw new Error(`Download failed: ${errorMessage}`)
   }
 }
 
@@ -140,17 +216,4 @@ export async function cleanupBinaries(): Promise<void> {
   catch (error) {
     p.log.error(`Failed to clean up binaries: ${error}`)
   }
-}
-
-/**
- * Get version from package.json
- */
-export function getPackageVersion(): string {
-  // In development, use a default version
-  if (process.env.NODE_ENV === 'development') {
-    return '0.1.0'
-  }
-
-  // In production, use version from package.json
-  return version
 }

@@ -38,10 +38,6 @@ export async function resolveConfig(options: Partial<CommonOptions>): Promise<Co
     return { ...defaults, ...options }
 
   const configOptions = normalizeConfig(config.config)
-  const merged = { ...configOptions, ...options }
-  if (!merged.screenshot && !merged.html && !merged.open) {
-    merged.open = true
-  }
 
-  return merged
+  return { ...configOptions, ...options }
 }

@@ -155,7 +155,7 @@ export class ScreenshotManager {
       const format = await this.getScreenshotFormat(outputPath)
       const normalizedPath = this.normalizeOutputPath(outputPath, format)
 
-      p.log.info(`Launching browser...`)
+      p.log.info(`Launching ${c.cyan`Puppeteer`}...`)
       // Launch browser
       const browser = await this.launchBrowser(puppeteer)
 

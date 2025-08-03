@@ -41,7 +41,7 @@ npx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/decoration.png' width='400'/>
+<img src='./assets/pncat.png' />
 </p>
 
 ## Output Formats

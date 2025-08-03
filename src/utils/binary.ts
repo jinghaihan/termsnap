@@ -1,7 +1,8 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'pathe'
-import { getBinaryPath as downloadBinaryPath, getPackageVersion } from './binary-downloader'
+import { version } from '../../package.json'
+import { getBinaryPath as downloadBinaryPath } from './binary-downloader'
 
 // Get the directory of the current module
 const __filename = fileURLToPath(import.meta.url)
@@ -12,10 +13,9 @@ const __dirname = dirname(__filename)
  */
 export async function getBinaryPath(): Promise<string> {
   // This function is only used in production mode
-  // In development mode, we use 'go run main.go' directly
+  // In development mode, use 'go run main.go' directly
 
   // Download from GitHub Release
-  const version = getPackageVersion()
   return await downloadBinaryPath(version)
 }
 
@@ -24,13 +24,14 @@ export async function getBinaryPath(): Promise<string> {
  */
 export function isDevelopmentMode(): boolean {
   // Check if running from source (not from installed package)
-  const isRunningFromSource = __dirname.includes('src')
+  // const isRunningFromSource = __dirname.includes('src')
   // Check if NODE_ENV is development
   const isDevEnv = process.env.NODE_ENV === 'development'
   // Check if in a development context (e.g., running with tsx)
-  const isDevContext = process.argv.some(arg => arg.includes('tsx') || arg.includes('ts-node'))
+  // const isDevContext = process.argv.some(arg => arg.includes('tsx') || arg.includes('ts-node'))
 
-  return isRunningFromSource || isDevEnv || isDevContext
+  // return isRunningFromSource || isDevEnv || isDevContext
+  return isDevEnv
 }
 
 /**
