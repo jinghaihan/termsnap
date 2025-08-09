@@ -8,11 +8,11 @@
 Creates beautiful screenshots of terminal command output with full local font and emoji support.
 
 ```sh
-pnpx termsnap lolcat -f <(figlet -f banner3 tremsnap)
+pnpx termsnap "lolcat -f <(figlet -f banner3 termsnap)"
 ```
 
 <p align='center'>
-<img src='./assets/banner.png' width='800'/>
+<img src='./assets/logo.png' />
 </p>
 
 ## Features
@@ -23,6 +23,10 @@ This project leverages Go-based terminal output proxy combined with web renderin
 - **Local Font & Emoji Support**: Perfect rendering of your system fonts and emoji characters
 - **Customizable Themes**: Extensive theme customization through configuration files
 - **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), or browser preview
+
+<p align='center'>
+<img src='./assets/emoji.png' />
+</p>
 
 ## Usage Examples
 
@@ -41,7 +45,7 @@ pnpx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/pncat-r.png' />
+<img src='./assets/help.png' />
 </p>
 
 ## Output Formats
@@ -62,7 +66,7 @@ When setting `lineHeight` greater than 1, box drawing characters may appear disc
 
 termsnap supports `termsnap.config.ts` for persistent configuration and theme customization. You can:
 
-- Use built-in themes (vitesse, catppuccin, dracula)
+- Use built-in themes (vitesse, catppuccin)
 - Use remote themes from [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes) VSCode directory
 - Create custom themes in `termsnap.config.ts`
 
@@ -87,7 +91,7 @@ pnpx termsnap "command" --theme "0x96f"
 - `open` - Open browser after generating HTML template
 
 ### Terminal Styling
-- `theme` - Terminal theme (vitesse-dark, vitesse-light, catppuccin variants, dracula, etc.)
+- `theme` - Terminal theme (vitesse-dark, vitesse-light, catppuccin variants, etc.)
 - `colors` - Custom terminal color configuration
 - `height` - Terminal height
 - `width` - Terminal width

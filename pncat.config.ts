@@ -8,7 +8,7 @@ export default defineConfig({
     },
     {
       name: 'utils',
-      match: [/ansi-parser/],
+      match: [/strip-ansi/, /get-port/, /kill-port/, /emoji-regex/],
     },
   ]),
 })

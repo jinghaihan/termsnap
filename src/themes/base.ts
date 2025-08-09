@@ -1,11 +1,5 @@
 import type { ThemeConfig } from '../types'
 
-export const DARK_BORDER_COLOR = '#515151'
-export const LIGHT_BORDER_COLOR = '#e0e0e0'
-
-export const DARK_BOX_SHADOW = '0 0 10px 0 rgba(0, 0, 0, 0.5)'
-export const LIGHT_BOX_SHADOW = '0 0 10px 0 rgba(0, 0, 0, 0.1)'
-
 export const BASE_THEME_OPTIONS: ThemeConfig = {
   font: {
     fontSize: 14,
@@ -14,20 +8,19 @@ export const BASE_THEME_OPTIONS: ThemeConfig = {
     lineHeight: 1,
   },
   border: {
-    borderRadius: 10,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: DARK_BORDER_COLOR,
+    borderColor: '#424242',
   },
-  boxShadow: DARK_BOX_SHADOW,
+  boxShadow: '0 22px 70px 4px rgba(0,0,0,0.56)',
   padding: '16px 0 16px 16px',
-  margin: '0',
+  margin: '36px 52px 64px 52px',
 }
 
 export const BASE_THEME_OPTIONS_LIGHT: ThemeConfig = {
   ...BASE_THEME_OPTIONS,
   border: {
     ...BASE_THEME_OPTIONS.border,
-    borderColor: LIGHT_BORDER_COLOR,
+    borderColor: '#AFAFAF',
   },
-  boxShadow: LIGHT_BOX_SHADOW,
 }

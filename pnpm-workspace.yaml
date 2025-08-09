@@ -1,5 +1,7 @@
 packages: []
 catalogs:
+  automation:
+    puppeteer: ^24.16.0
   build:
     unbuild: ^3.6.0
   cli:
@@ -12,7 +14,7 @@ catalogs:
   lint:
     '@antfu/eslint-config': ^5.2.0
     eslint: ^9.32.0
-    lint-staged: ^16.1.4
+    lint-staged: ^16.1.5
     simple-git-hooks: ^2.13.1
   network:
     ws: ^8.18.3
@@ -23,15 +25,17 @@ catalogs:
     execa: ^9.6.0
     pathe: ^2.0.3
     unconfig: ^7.3.2
-  prod:
-    puppeteer: ^24.16.0
   script:
     tsx: ^4.20.3
   test:
     vitest: ^3.2.4
   types:
+    '@types/kill-port': ^2.0.3
     '@types/node': ^24.2.0
     '@types/puppeteer': ^7.0.4
     '@types/ws': ^8.18.1
   utils:
-    ansi-parser: ^3.2.11
+    emoji-regex: ^10.4.0
+    get-port: ^7.1.0
+    kill-port: 1.6.1
+    strip-ansi: ^7.1.0

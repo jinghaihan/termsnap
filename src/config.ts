@@ -1,7 +1,8 @@
-import type { CommandOptions } from './types'
+import type { CommandOptions, ConfigOptions, DeepRequired, ThemeConfig } from './types'
 import process from 'node:process'
+import getPort, { portNumbers } from 'get-port'
 import { createConfigLoader } from 'unconfig'
-import { DEFAULT_COMMAND_OPTIONS } from './constants'
+import { loadTheme } from './themes'
 
 function normalizeConfig(options: Partial<CommandOptions>) {
   // interop
@@ -11,11 +12,10 @@ function normalizeConfig(options: Partial<CommandOptions>) {
   return options
 }
 
-export async function resolveConfig(options: Partial<CommandOptions>): Promise<CommandOptions> {
-  const defaults = { ...DEFAULT_COMMAND_OPTIONS }
+export async function resolveConfig(command: string, options: Partial<CommandOptions>): Promise<ConfigOptions> {
   options = normalizeConfig(options)
 
-  // cac performs implicit type conversion, so need to handle the case where theme is a number
+  // in some case cac will perform implicit type conversion
   if (typeof options.theme === 'number') {
     const args = process.argv.slice(2)
     const themeIndex = args.indexOf('--theme')
@@ -24,6 +24,23 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<C
     }
   }
 
+  options.cwd = options.cwd || process.cwd()
+  options.open = options.open || (!options.html && !options.screenshot)
+
+  if (typeof options.html === 'boolean')
+    options.html = 'termsnap.html'
+  else if (options.html)
+    options.html = options.html.endsWith('.html') ? options.html : `${options.html}.html`
+
+  if (typeof options.screenshot === 'boolean')
+    options.screenshot = 'termsnap.png'
+
+  options.port = options.port ? Number(options.port) : 3000
+  options.theme = options.theme || 'vitesse-dark'
+  options.decoration = options.decoration || false
+  options.force = options.force || false
+  options.dpi = options.dpi || 2
+
   const loader = createConfigLoader<CommandOptions>({
     sources: [
       {
@@ -31,22 +48,33 @@ export async function resolveConfig(options: Partial<CommandOptions>): Promise<C
           'termsnap.config',
         ],
       },
-      {
-        files: [
-          '.termsnaprc',
-        ],
-        extensions: ['json', ''],
-      },
     ],
-    cwd: process.cwd(),
+    cwd: options.cwd,
     merge: false,
   })
 
   const config = await loader.load()
-  if (!config.sources.length)
-    return { ...defaults, ...options }
+  const configOptions = config.sources.length ? normalizeConfig(config.config) : {}
+  const merged = { ...configOptions, ...options }
 
-  const configOptions = normalizeConfig(config.config)
+  options.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
+  const themeConfig = await loadTheme(options.theme, options.force) as DeepRequired<ThemeConfig>
 
-  return { ...configOptions, ...options }
+  // font config
+  themeConfig.font.fontFamily = merged.fontFamily || themeConfig.font.fontFamily
+  themeConfig.font.fontSize = merged.fontSize || themeConfig.font.fontSize
+  themeConfig.font.fontWeight = merged.fontWeight || themeConfig.font.fontWeight
+  themeConfig.font.lineHeight = merged.lineHeight || themeConfig.font.lineHeight
+
+  // border config
+  themeConfig.border.borderColor = merged.borderColor || themeConfig.border.borderColor
+  themeConfig.border.borderRadius = merged.borderRadius || themeConfig.border.borderRadius
+  themeConfig.border.borderWidth = merged.borderWidth || themeConfig.border.borderWidth
+
+  themeConfig.theme = { ...themeConfig.theme, ...merged.colors }
+  themeConfig.boxShadow = merged.boxShadow || themeConfig.boxShadow
+  themeConfig.padding = merged.padding || themeConfig.padding
+  themeConfig.margin = merged.margin || themeConfig.margin
+
+  return { command, ...merged, ...themeConfig } as ConfigOptions
 }
