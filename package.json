@@ -47,7 +47,7 @@
     "prepare": "npx simple-git-hooks",
     "bootstrap": "pnpm install",
     "preinstall": "npx only-allow pnpm",
-    "prepublishOnly": "pnpm build && pnpm build:go"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@clack/prompts": "catalog:node",
