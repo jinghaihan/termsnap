@@ -35,7 +35,7 @@ export async function openInBroz(outputs: TerminalOutput[], options: ConfigOptio
   })
 
   const { width, height } = await calculateContainerDimensions(outputs, generateOptions)
-  p.log.info(`Opening ${c.cyan`Broz`} browser with size ${c.yellow`${width}x${height}`}...`)
+  p.log.info(`Opening ${c.cyan`Broz`} with size ${c.yellow`${width}x${height}`}...`)
 
   // Launch broz with the local server URL
   await execa(

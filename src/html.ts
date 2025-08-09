@@ -13,7 +13,7 @@ export async function generateHTML(
   save: boolean = false,
 ): Promise<string> {
   const cdn = XTERM_CDN_URLS[options.cdn]
-  const { combinedOutput, maxLineLength } = processTerminalOutputs(outputs)
+  const { combinedOutput, maxLineLength, lineCount } = processTerminalOutputs(outputs)
   const { width, height } = calculateContainerDimensions(outputs, options)
 
   const html = `
@@ -148,7 +148,7 @@ export async function generateHTML(
                   lineHeight: themeConfig.font.lineHeight,
                   theme: ${JSON.stringify(options.theme)},
                   cols: ${maxLineLength},
-                  rows: ${combinedOutput.split('\n').length},
+                  rows: ${lineCount},
               });
 
               // Initialize fit addon

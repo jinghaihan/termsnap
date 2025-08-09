@@ -23,7 +23,7 @@ export async function generateScreenshot(outputs: TerminalOutput[], options: Con
   const viewportWidth = width + margin.horizontal
   const viewportHeight = height + margin.vertical
 
-  p.log.info(`Launching ${c.cyan`Puppeteer`} browser with size: ${c.yellow`${width}x${height}`}`)
+  p.log.info(`Launching ${c.cyan`Puppeteer`} with size: ${c.yellow`${width}x${height}`}`)
   const puppeteer = (await (import('puppeteer'))).default
   const browser = await launchBrowser(puppeteer)
   const page = await browser.newPage()
@@ -76,7 +76,7 @@ async function launchBrowser(puppeteer: PuppeteerNode): Promise<Browser> {
       await installChrome()
       return await launch()
     }
-    p.outro(c.red(`Failed to launch browser: ${errorMessage}`))
+    p.outro(c.red(`Failed to launch ${c.cyan`Puppeteer`}: ${errorMessage}`))
     process.exit(1)
   }
 }

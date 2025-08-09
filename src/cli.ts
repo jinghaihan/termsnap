@@ -35,6 +35,7 @@ try {
     .option('--dpi <dpi>', 'Device pixel ratio for screenshot', { default: 2 })
     .option('--html [html]', 'Generate HTML template and save to file')
     .option('--open', 'Open the browser after generating the HTML template', { default: false })
+    .option('--force', 'Force to download the theme from remote', { default: false })
     .option('--cdn <provider>', 'CDN provider for xterm.js', { default: 'jsdelivr' })
     .action(async (command: string, options: CommandOptions) => {
       p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)

@@ -84,9 +84,11 @@ pnpx termsnap "command" --theme "0x96f"
 ### Server Settings
 - `port` - Server port (default: 3000)
 - `cdn` - CDN provider for xterm.js (jsdelivr, unpkg)
+- `force` - Force to download the theme from remote
 
 ### Output Options
 - `screenshot` - Generate screenshot and save to file
+- `dpi` - Device pixel ratio for screenshot
 - `html` - Generate HTML template and save to file
 - `open` - Open browser after generating HTML template
 
