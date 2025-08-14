@@ -33,11 +33,11 @@ export class GoSession {
   }
 
   async start() {
+    const { command, args } = await getGoServerCommand(this.port)
     process.stdin.setRawMode(true)
     process.stdin.resume()
     process.stdin.setEncoding('utf8')
 
-    const { command, args } = await getGoServerCommand(this.port)
     this.goProcess = execa(command, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env, PORT: this.port.toString() },
