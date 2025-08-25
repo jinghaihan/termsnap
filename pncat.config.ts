@@ -3,6 +3,11 @@ import { defineConfig, mergeCatalogRules } from 'pncat'
 export default defineConfig({
   catalogRules: mergeCatalogRules([
     {
+      name: 'screeshot',
+      match: [/puppeteer/],
+      priority: 0,
+    },
+    {
       name: 'network',
       match: [/ws/],
     },
