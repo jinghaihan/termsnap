@@ -26,7 +26,6 @@ async function buildGo() {
         'go',
         [
           'build',
-          '-ldflags=-s -w',
           '-o',
           join('binaries', build.output),
           'main.go',

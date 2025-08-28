@@ -57,7 +57,7 @@
     "get-port": "catalog:utils",
     "kill-port": "catalog:utils",
     "pathe": "catalog:node",
-    "puppeteer": "catalog:screeshot",
+    "puppeteer-core": "catalog:screeshot",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
   },

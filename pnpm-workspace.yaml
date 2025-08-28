@@ -23,7 +23,7 @@ catalogs:
     pathe: ^2.0.3
     unconfig: ^7.3.3
   screeshot:
-    puppeteer: ^24.17.0
+    puppeteer-core: ^24.17.0
   script:
     tsx: ^4.20.5
   test:

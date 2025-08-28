@@ -1,4 +1,4 @@
-import type { Browser, ElementHandle, PuppeteerNode } from 'puppeteer'
+import type { Browser, ChromeReleaseChannel, ElementHandle, PuppeteerNode } from 'puppeteer-core'
 import type { ConfigOptions, ImageFormat, TerminalOutput } from './types'
 import { writeFile } from 'node:fs/promises'
 import { extname } from 'node:path'
@@ -27,10 +27,15 @@ async function installChrome() {
 }
 
 async function launchBrowser(puppeteer: PuppeteerNode): Promise<Browser> {
+  const chromePath = await getChromePath()
   const launch = async () => {
+    if (!chromePath) {
+      throw new Error('Could not find Chrome')
+    }
     return await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: chromePath,
     })
   }
 
@@ -45,6 +50,19 @@ async function launchBrowser(puppeteer: PuppeteerNode): Promise<Browser> {
     }
     p.outro(c.red(`Failed to launch ${c.cyan`Puppeteer`}: ${msg}`))
     process.exit(1)
+  }
+}
+
+async function getChromePath() {
+  const { executablePath } = await import('puppeteer-core')
+  const order: ChromeReleaseChannel[] = ['chrome', 'chrome-beta', 'chrome-canary', 'chrome-dev']
+  for (const browser of order) {
+    try {
+      return executablePath(browser)
+    }
+    catch {
+      continue
+    }
   }
 }
 
@@ -72,7 +90,7 @@ export async function generateScreenshot(outputs: TerminalOutput[], options: Con
   const viewportHeight = height + margin.vertical
 
   p.log.info(`Launching ${c.cyan`Puppeteer`} with size: ${c.yellow`${width}x${height}`}`)
-  const puppeteer = (await (import('puppeteer'))).default
+  const { default: puppeteer } = await import('puppeteer-core')
   const browser = await launchBrowser(puppeteer)
   const page = await browser.newPage()
 
