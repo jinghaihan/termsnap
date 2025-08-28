@@ -6,7 +6,6 @@ export const CATPPUCCIN_FRAPPE_THEME: ThemeConfig = {
   theme: {
     background: '#303446',
     foreground: '#c6d0f5',
-    selectionBackground: '#626880',
     brightBlack: '#51576d',
     brightBlue: '#8caaee',
     brightCyan: '#81c8be',

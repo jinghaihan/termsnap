@@ -1,7 +1,7 @@
 {
   "name": "termsnap",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "packageManager": "pnpm@10.15.0",
   "description": "📸 Creates beautiful screenshots based on terminal command output.",
   "author": "jinghaihan",
@@ -52,13 +52,12 @@
     "@clack/prompts": "catalog:node",
     "ansis": "catalog:node",
     "cac": "catalog:node",
-    "emoji-regex": "catalog:utils",
     "execa": "catalog:node",
+    "fancy-ansi": "catalog:utils",
     "get-port": "catalog:utils",
     "kill-port": "catalog:utils",
     "pathe": "catalog:node",
     "puppeteer": "catalog:screeshot",
-    "strip-ansi": "catalog:utils",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
   },

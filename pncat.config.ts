@@ -13,7 +13,7 @@ export default defineConfig({
     },
     {
       name: 'utils',
-      match: [/strip-ansi/, /get-port/, /kill-port/, /emoji-regex/],
+      match: [/get-port/, /kill-port/, /fancy-ansi/],
     },
   ]),
 })

@@ -9,7 +9,6 @@ export default defineConfig({
   colors: {
     // background: '#1c1c1c',
     // foreground: '#ddeedd',
-    // selectionBackground: '#4d4d4d',
     // brightBlack: '#554444',
     // brightBlue: '#87ceeb',
     // brightCyan: '#b0c4de',

@@ -6,7 +6,7 @@ import * as p from '@clack/prompts'
 import c from 'ansis'
 import { join } from 'pathe'
 import { BUILTIN_THEME_CHOICES, THEME_CACHE_DIR } from '../constants'
-import { convertToXtermTheme } from './converter'
+import { convertToColorTheme } from './converter'
 
 export async function loadTheme(themeName: string = 'vitesse-dark', force: boolean = false): Promise<ThemeConfig> {
   if (BUILTIN_THEME_CHOICES.includes(themeName as BuiltinTheme)) {
@@ -55,12 +55,12 @@ async function loadRemoteTheme(themeName: string, force: boolean): Promise<Theme
       themeData = await downloadRemoteTheme(url, cachePath)
     }
 
-    const xtermTheme = convertToXtermTheme(themeData)
+    const colorTheme = convertToColorTheme(themeData)
     const { BASE_THEME_OPTIONS } = await import('./base')
 
     return {
       ...BASE_THEME_OPTIONS,
-      theme: xtermTheme,
+      theme: colorTheme,
     }
   }
   catch {

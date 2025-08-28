@@ -6,7 +6,6 @@ export const CATPPUCCIN_MOCHA_THEME: ThemeConfig = {
   theme: {
     background: '#1e1e2e',
     foreground: '#cdd6f4',
-    selectionBackground: '#585b70',
     brightBlack: '#585b70',
     brightBlue: '#74a8fc',
     brightCyan: '#6bd7ca',

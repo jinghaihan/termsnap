@@ -12,6 +12,14 @@ function normalizeConfig(options: Partial<CommandOptions>) {
   return options
 }
 
+function normalizeFileExt(ext: string, name?: string) {
+  if (typeof name === 'boolean')
+    name = `termsnap.${ext}`
+  else if (name)
+    name = name.endsWith(`.${ext}`) ? name : `${name}.${ext}`
+  return name
+}
+
 export async function resolveConfig(command: string, options: Partial<CommandOptions>): Promise<ConfigOptions> {
   options = normalizeConfig(options)
 
@@ -24,16 +32,15 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
     }
   }
 
+  const screenshot = !!options.png || !!options.jpeg || !!options.webp
+
   options.cwd = options.cwd || process.cwd()
-  options.open = options.open || (!options.html && !options.screenshot)
+  options.open = options.open || (!options.html && !screenshot)
 
-  if (typeof options.html === 'boolean')
-    options.html = 'termsnap.html'
-  else if (options.html)
-    options.html = options.html.endsWith('.html') ? options.html : `${options.html}.html`
-
-  if (typeof options.screenshot === 'boolean')
-    options.screenshot = 'termsnap.png'
+  options.html = normalizeFileExt('html', options.html)
+  options.png = normalizeFileExt('png', options.png)
+  options.jpeg = normalizeFileExt('jpeg', options.jpeg)
+  options.webp = normalizeFileExt('webp', options.webp)
 
   options.port = options.port ? Number(options.port) : 3000
   options.theme = options.theme || 'vitesse-dark'
@@ -76,5 +83,5 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   themeConfig.padding = merged.padding || themeConfig.padding
   themeConfig.margin = merged.margin || themeConfig.margin
 
-  return { command, ...merged, ...themeConfig } as ConfigOptions
+  return { command, screenshot, ...merged, ...themeConfig } as ConfigOptions
 }

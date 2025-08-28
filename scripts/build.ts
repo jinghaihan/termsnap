@@ -2,7 +2,6 @@
 
 import { mkdir } from 'node:fs/promises'
 import process from 'node:process'
-import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
 import { join } from 'pathe'
@@ -16,30 +15,39 @@ const builds = [
 ]
 
 async function buildGo() {
-  p.intro(`${c.cyan`Building Go binaries for all platforms...`}`)
+  console.log(`${c.cyan`Building Go binaries for all platforms...`}`)
   await mkdir('binaries', { recursive: true })
 
   for (const build of builds) {
-    p.log.info(`${c.blue`Building for ${c.cyan`${build.os}`} (${c.yellow`${build.arch}`})...`}`)
+    console.log(`${c.blue`Building for ${c.cyan`${build.os}`} (${c.yellow`${build.arch}`})...`}`)
 
     try {
-      await execa('go', ['build', '-o', join('binaries', build.output), 'main.go'], {
-        env: {
-          ...process.env,
-          GOOS: build.os,
-          GOARCH: build.arch,
+      await execa(
+        'go',
+        [
+          'build',
+          '-ldflags=-s -w',
+          '-o',
+          join('binaries', build.output),
+          'main.go',
+        ],
+        {
+          env: {
+            ...process.env,
+            GOOS: build.os,
+            GOARCH: build.arch,
+          },
+          stdio: 'inherit',
         },
-        stdio: 'inherit',
-      })
-      p.log.success(`${c.green`Built ${c.yellow`${build.output}`}`}`)
+      )
     }
     catch (error) {
-      p.outro(`${c.red`Failed to build ${c.yellow`${build.output}`}`}`)
+      console.log(`${c.red`Failed to build ${c.yellow`${build.output}`}`}`)
       throw error
     }
   }
 
-  p.outro(`${c.green`Build completed`}`)
+  console.log(`${c.green`Build completed`}`)
 }
 
 buildGo().catch((error) => {

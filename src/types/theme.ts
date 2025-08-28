@@ -6,7 +6,7 @@ export interface ThemeConfig {
   /**
    * The color theme of the terminal.
    */
-  theme?: XtermTheme
+  theme?: ColorTheme
   /**
    * The border config of the terminal.
    */
@@ -28,24 +28,11 @@ export interface ThemeConfig {
 /**
  * Contains colors to theme the terminal with.
  */
-export interface XtermTheme {
+export interface ColorTheme {
   /** The default foreground color */
   foreground?: string
   /** The default background color */
   background?: string
-  /** The cursor color */
-  cursor?: string
-  /** The accent color of the cursor (fg color for a block cursor) */
-  cursorAccent?: string
-  /** The selection background color (can be transparent) */
-  selectionBackground?: string
-  /** The selection foreground color */
-  selectionForeground?: string
-  /**
-   * The selection background color when the terminal does not have focus (can
-   * be transparent)
-   */
-  selectionInactiveBackground?: string
   /** ANSI black (eg. `\x1b[30m`) */
   black?: string
   /** ANSI red (eg. `\x1b[31m`) */
@@ -78,8 +65,6 @@ export interface XtermTheme {
   brightCyan?: string
   /** ANSI bright white (eg. `\x1b[1;37m`) */
   brightWhite?: string
-  /** ANSI extended colors (16-255) */
-  extendedAnsi?: string[]
 }
 
 /**
@@ -164,7 +149,4 @@ export interface VscodeWorkbenchColors {
   'terminal.ansiBrightRed'?: string
   'terminal.ansiBrightWhite'?: string
   'terminal.ansiBrightYellow'?: string
-  'terminal.selectionBackground'?: string
-  'terminalCursor.background'?: string
-  'terminalCursor.foreground'?: string
 }

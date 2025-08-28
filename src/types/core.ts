@@ -1,7 +1,6 @@
-import type { BUILTIN_THEME_CHOICES, CDN_PROVIDER_CHOICES, IMAGE_FORMAT_CHOICES } from '../constants'
-import type { BorderConfig, FontConfig, ThemeConfig, XtermTheme } from './theme'
+import type { BUILTIN_THEME_CHOICES, IMAGE_FORMAT_CHOICES } from '../constants'
+import type { BorderConfig, ColorTheme, FontConfig, ThemeConfig } from './theme'
 
-export type CdnProvider = (typeof CDN_PROVIDER_CHOICES)[number]
 export type ImageFormat = (typeof IMAGE_FORMAT_CHOICES)[number]
 export type BuiltinTheme = (typeof BUILTIN_THEME_CHOICES)[number]
 
@@ -14,17 +13,21 @@ export interface CommonOptions {
    */
   port?: number
   /**
-   * CDN provider for xterm.js
-   */
-  cdn?: CdnProvider
-  /**
-   * Generate a screenshot and save to file
-   */
-  screenshot?: string
-  /**
    * Device pixel ratio for screenshot
    */
   dpi?: number
+  /**
+   * Generate a png and save to file
+   */
+  png?: string
+  /**
+   * Generate a jpeg and save to file
+   */
+  jpeg?: string
+  /**
+   * Generate a webp and save to file
+   */
+  webp?: string
   /**
    * Generate HTML template and save to file
    */
@@ -47,7 +50,7 @@ export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeC
   /**
    * Terminal theme configuration
    */
-  colors?: XtermTheme
+  colors?: ColorTheme
   /**
    * Terminal height
    */
@@ -74,6 +77,7 @@ export type DeepRequired<T> = T extends object
 
 export type ConfigOptions = DeepRequired<Omit<Options, 'height' | 'width'>> & {
   command: string
+  screenshot: boolean
   height?: number
   width?: number
 }

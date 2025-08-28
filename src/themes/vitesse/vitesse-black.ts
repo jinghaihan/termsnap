@@ -7,7 +7,6 @@ export const VITESSE_BLACK_THEME: ThemeConfig = {
   theme: {
     background: '#000',
     foreground: '#dbd7caee',
-    selectionBackground: '#eeeeee18',
     brightBlack: '#777777',
     brightBlue: '#6394bf',
     brightCyan: '#5eaab5',

@@ -1,14 +1,11 @@
-import type { VscodeTerminalConfig, XtermTheme } from '../types'
+import type { ColorTheme, VscodeTerminalConfig } from '../types'
 
-export function convertToXtermTheme(vscodeTheme: VscodeTerminalConfig): XtermTheme {
+export function convertToColorTheme(vscodeTheme: VscodeTerminalConfig): ColorTheme {
   const workbench = vscodeTheme['workbench.colorCustomizations'] || {}
 
   return {
     foreground: workbench['terminal.foreground'],
     background: workbench['terminal.background'],
-    cursor: workbench['terminalCursor.foreground'],
-    cursorAccent: workbench['terminalCursor.background'],
-    selectionBackground: workbench['terminal.selectionBackground'],
     black: workbench['terminal.ansiBlack'],
     red: workbench['terminal.ansiRed'],
     green: workbench['terminal.ansiGreen'],

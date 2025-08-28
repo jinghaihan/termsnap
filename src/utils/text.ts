@@ -1,13 +1,7 @@
 import type { TerminalOutput } from '../types'
-import emojiRegex from 'emoji-regex'
-import stripAnsi from 'strip-ansi'
+import { FancyAnsi, stripAnsi } from 'fancy-ansi'
 
-const EMOJI_REGEX = emojiRegex()
-
-// Add a space after every emoji
-function fixEmojiSpacing(text: string): string {
-  return text.replace(EMOJI_REGEX, '$& ')
-}
+const fancyAnsi = new FancyAnsi()
 
 // Remove spinner characters
 function cleanSpinner(text: string): string {
@@ -15,7 +9,18 @@ function cleanSpinner(text: string): string {
 }
 
 function cleanOutput(text: string): string {
-  return cleanSpinner(fixEmojiSpacing(text))
+  return cleanSpinner(text)
+}
+
+function ansiToHTML(text: string): string {
+  return text
+    .split('\n')
+    .map((line) => {
+      if (!line || line === '\r')
+        return `<div class="terminal-line">&#8203;</div>`
+      return `<div class="terminal-line">${fancyAnsi.toHtml(line)}</div>`
+    })
+    .join('')
 }
 
 export function processTerminalOutputs(outputs: TerminalOutput[]) {
@@ -33,5 +38,9 @@ export function processTerminalOutputs(outputs: TerminalOutput[]) {
   const lineCount = lines.length
   const maxLineLength = Math.max(...lines.map((line: string) => line.length), 0)
 
-  return { combinedOutput, lineCount, maxLineLength }
+  return {
+    html: ansiToHTML(combinedOutput),
+    lineCount,
+    maxLineLength,
+  }
 }

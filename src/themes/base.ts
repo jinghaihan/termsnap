@@ -5,7 +5,7 @@ export const BASE_THEME_OPTIONS: ThemeConfig = {
     fontSize: 14,
     fontFamily: 'monospace',
     fontWeight: 400,
-    lineHeight: 1,
+    lineHeight: 1.8,
   },
   border: {
     borderRadius: 8,
@@ -13,7 +13,7 @@ export const BASE_THEME_OPTIONS: ThemeConfig = {
     borderColor: '#424242',
   },
   boxShadow: '0 22px 70px 4px rgba(0,0,0,0.56)',
-  padding: '16px 0 16px 16px',
+  padding: '16px',
   margin: '36px 52px 64px 52px',
 }
 

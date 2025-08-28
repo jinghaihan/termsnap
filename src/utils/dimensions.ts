@@ -14,7 +14,7 @@ export function calculateContainerDimensions(outputs: TerminalOutput[], options:
   const { lineCount, maxLineLength } = processTerminalOutputs(outputs)
   const { fontSize, lineHeight } = options.font
   // Calculate character width (approximate for monospace fonts)
-  const charWidth = fontSize * 0.62
+  const charWidth = fontSize * 0.60
   const lineHeightPx = fontSize * lineHeight
 
   const padding = parseSpacing(options.padding)

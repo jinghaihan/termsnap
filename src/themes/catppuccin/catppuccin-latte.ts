@@ -6,7 +6,6 @@ export const CATPPUCCIN_LATTE_THEME: ThemeConfig = {
   theme: {
     background: '#eff1f5',
     foreground: '#4c4f69',
-    selectionBackground: '#acb0be',
     brightBlack: '#5c5f77',
     brightBlue: '#1e66f5',
     brightCyan: '#179299',

@@ -10,9 +10,7 @@ import { getGoServerCommand } from './utils/binary'
 import { waitPort } from './utils/process'
 import { WebSocketClient } from './websocket-client'
 
-export interface GoSessionOptions extends Pick<WebSocketClientOptions, 'port' | 'command'> {
-
-}
+export interface GoSessionOptions extends Pick<WebSocketClientOptions, 'port' | 'command'> {}
 
 export interface GoSessionResult {
   exitCode: number
@@ -88,6 +86,8 @@ export class GoSession {
     }
 
     process.stdin.setRawMode(false)
+    process.stdin.pause()
+    process.stdin.setEncoding('utf8')
     process.stdout.write('\x1B[?25h') // Show cursor
     process.stdout.write('\x1B[0m') // Reset colors
   }

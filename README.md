@@ -35,17 +35,17 @@ This project leverages Go-based terminal output proxy combined with web renderin
 pnpx termsnap "command" --open
 
 # Save as HTML file
-pnpx termsnap "command" --html index.html
+pnpx termsnap "command" --html index
 
 # Save as screenshot
-pnpx termsnap "command" --screenshot image.png
+pnpx termsnap "command" --png image
 
 # Custom theme and decoration
 pnpx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/help.png' />
+<img src='./assets/help_0_3_0.png' />
 </p>
 
 ## Output Formats
@@ -55,12 +55,6 @@ Generate your terminal output in multiple formats:
 - **HTML**: Save as standalone HTML file with embedded styling
 - **Images**: Export as PNG, JPEG, or WebP formats
 - **Browser Preview**: Open directly in browser (powered by [Broz](https://github.com/antfu/broz))
-
-## Known Issues
-
-In some cases, especially with custom fonts, width and height calculations may be inaccurate. When this occurs, you can manually set the `height` and `width` parameters to force specific viewport dimensions.
-
-When setting `lineHeight` greater than 1, box drawing characters may appear discontinuous with gaps between adjacent lines due to limitations in xterm.js rendering.
 
 ## Theme Customization
 
@@ -83,12 +77,13 @@ pnpx termsnap "command" --theme "0x96f"
 
 ### Server Settings
 - `port` - Server port (default: 3000)
-- `cdn` - CDN provider for xterm.js (jsdelivr, unpkg)
 - `force` - Force to download the theme from remote
 
 ### Output Options
-- `screenshot` - Generate screenshot and save to file
 - `dpi` - Device pixel ratio for screenshot
+- `png` - Generate png and save to file
+- `jpeg` - Generate jpeg and save to file
+- `webp` - Generate webp and save to file
 - `html` - Generate HTML template and save to file
 - `open` - Open browser after generating HTML template
 

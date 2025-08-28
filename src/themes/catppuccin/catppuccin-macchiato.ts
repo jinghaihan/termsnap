@@ -6,7 +6,6 @@ export const CATPPUCCIN_MACCHIATO_THEME: ThemeConfig = {
   theme: {
     background: '#24273a',
     foreground: '#cad3f5',
-    selectionBackground: '#5b6078',
     brightBlack: '#5b6078',
     brightBlue: '#78a1f6',
     brightCyan: '#63cbc0',

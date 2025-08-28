@@ -1,5 +1,3 @@
-export const CDN_PROVIDER_CHOICES = ['jsdelivr', 'unpkg'] as const
-
 export const IMAGE_FORMAT_CHOICES = ['png', 'jpeg', 'webp'] as const
 
 export const BUILTIN_THEME_CHOICES = [
