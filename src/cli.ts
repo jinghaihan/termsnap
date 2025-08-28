@@ -10,6 +10,7 @@ import { resolveConfig } from './config'
 import { GoSession } from './go-session'
 import { generateHTML } from './html'
 import { generateScreenshot } from './screenshot'
+import { processTerminalOutputs } from './utils/process'
 
 try {
   const cli: CAC = cac('termsnap')
@@ -24,7 +25,7 @@ try {
     .option('--font-family <font-family>', 'Terminal font family', { default: 'monospace' })
     .option('--font-size <font-size>', 'Terminal font size', { default: 14 })
     .option('--font-weight <font-weight>', 'Terminal font weight', { default: 400 })
-    .option('--line-height <line-height>', 'Terminal line height', { default: 1.8 })
+    .option('--line-height <line-height>', 'Terminal line height', { default: 1.3 })
     .option('--border-radius <border-radius>', 'Terminal border radius', { default: 8 })
     .option('--border-width <border-width>', 'Terminal border width', { default: 1 })
     .option('--border-color <border-color>', 'Terminal border color', { default: '#424242' })
@@ -66,16 +67,17 @@ try {
         if (result.exitCode !== 0)
           process.exit(result.exitCode)
 
+        const processed = await processTerminalOutputs(result.outputs, config)
         if (outputHTML) {
-          await generateHTML(result.outputs, config, true)
+          await generateHTML(processed, config, true)
         }
 
         if (outputScreenshot) {
-          await generateScreenshot(result.outputs, config)
+          await generateScreenshot(processed, config)
         }
 
         if (openBrowser) {
-          await openInBroz(result.outputs, config)
+          await openInBroz(processed, config)
         }
 
         p.outro(c.green`Done!`)

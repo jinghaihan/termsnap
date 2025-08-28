@@ -1,15 +1,12 @@
-import type { ConfigOptions, TerminalOutput } from './types'
+import type { ConfigOptions, ProcessedTerminalOutputs } from './types'
 import { writeFile } from 'node:fs/promises'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { join } from 'pathe'
 import { DECORATION_BAR_HEIGHT } from './constants'
-import { calculateContainerDimensions } from './utils/dimensions'
-import { processTerminalOutputs } from './utils/text'
 
-export async function generateHTML(outputs: TerminalOutput[], options: ConfigOptions, save: boolean = false): Promise<string> {
-  const { html: terminalHTML } = processTerminalOutputs(outputs)
-  const { width, height } = calculateContainerDimensions(outputs, options)
+export async function generateHTML(outputs: ProcessedTerminalOutputs, options: ConfigOptions, save: boolean = false): Promise<string> {
+  const { html: terminalHTML } = outputs
 
   const html = `
   <!DOCTYPE html>
@@ -20,6 +17,7 @@ export async function generateHTML(outputs: TerminalOutput[], options: ConfigOpt
       <title>${options.command}</title>
       <style>
         :root {
+          --ansi-dim-opacity: 1;
           --ansi-black: ${options.theme.black};
           --ansi-red: ${options.theme.red};
           --ansi-green: ${options.theme.green};
@@ -48,14 +46,14 @@ export async function generateHTML(outputs: TerminalOutput[], options: ConfigOpt
           line-height: ${options.font.lineHeight};
           min-height: 100vh;
           width: 100vw;
-          overflow: auto;
           display: flex;
           justify-content: center;
           align-items: center;
+          overflow: auto;
         }
         .terminal-container {
-          width: ${width}px;
-          height: ${height}px;
+          width: ${options.width ? `${options.width}px` : 'auto'};
+          height: ${options.height ? `${options.height}px` : 'auto'};
           font-family: ${options.font.fontFamily};
           font-size: ${options.font.fontSize}px;
           font-weight: ${options.font.fontWeight};
@@ -68,7 +66,6 @@ export async function generateHTML(outputs: TerminalOutput[], options: ConfigOpt
           margin: ${options.margin || '0'};
           box-sizing: border-box;
           position: relative;
-          overflow: hidden;
         }
         .terminal-line {
           font-size: ${options.font.fontSize}px;

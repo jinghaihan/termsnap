@@ -81,3 +81,11 @@ export type ConfigOptions = DeepRequired<Omit<Options, 'height' | 'width'>> & {
   height?: number
   width?: number
 }
+
+export interface ProcessedTerminalOutputs {
+  html: string
+  rows: number
+  cols: number
+  width: number
+  height: number
+}

@@ -1,9 +1,8 @@
-import type { ConfigOptions, TerminalOutput } from '../types'
+import type { ConfigOptions } from '../types'
 import { DECORATION_BAR_HEIGHT } from '../constants'
 import { parseSpacing } from './parse'
-import { processTerminalOutputs } from './text'
 
-export function calculateContainerDimensions(outputs: TerminalOutput[], options: ConfigOptions) {
+export function calculateContainerDimensions(rows: number, cols: number, options: ConfigOptions) {
   if (options.width && options.height) {
     return {
       width: normalizeSize(options.width),
@@ -11,15 +10,14 @@ export function calculateContainerDimensions(outputs: TerminalOutput[], options:
     }
   }
 
-  const { lineCount, maxLineLength } = processTerminalOutputs(outputs)
   const { fontSize, lineHeight } = options.font
   // Calculate character width (approximate for monospace fonts)
   const charWidth = fontSize * 0.60
   const lineHeightPx = fontSize * lineHeight
 
   const padding = parseSpacing(options.padding)
-  let width = normalizeSize(maxLineLength * charWidth + padding.horizontal)
-  let height = normalizeSize(lineCount * lineHeightPx + padding.vertical)
+  let width = normalizeSize(cols * charWidth + padding.horizontal)
+  let height = normalizeSize(rows * lineHeightPx + padding.vertical)
 
   if (options.width)
     width = normalizeSize(options.width)

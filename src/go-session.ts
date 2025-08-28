@@ -7,7 +7,7 @@ import c from 'ansis'
 import { execa } from 'execa'
 import killPort from 'kill-port'
 import { getGoServerCommand } from './utils/binary'
-import { waitPort } from './utils/process'
+import { waitPort } from './utils/port'
 import { WebSocketClient } from './websocket-client'
 
 export interface GoSessionOptions extends Pick<WebSocketClientOptions, 'port' | 'command'> {}

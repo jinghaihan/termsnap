@@ -1,7 +1,7 @@
 {
   "name": "termsnap",
   "type": "module",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "packageManager": "pnpm@10.15.0",
   "description": "📸 Creates beautiful screenshots based on terminal command output.",
   "author": "jinghaihan",
@@ -50,6 +50,8 @@
   },
   "dependencies": {
     "@clack/prompts": "catalog:node",
+    "@xterm/addon-serialize": "catalog:xterm",
+    "@xterm/headless": "catalog:xterm",
     "ansis": "catalog:node",
     "cac": "catalog:node",
     "execa": "catalog:node",
@@ -58,6 +60,7 @@
     "kill-port": "catalog:utils",
     "pathe": "catalog:node",
     "puppeteer-core": "catalog:screeshot",
+    "string-width": "catalog:utils",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
   },

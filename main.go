@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -13,11 +12,9 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unicode/utf8"
 
 	"github.com/creack/pty"
 	"github.com/gorilla/websocket"
-	"golang.org/x/term"
 )
 
 var upgrader = websocket.Upgrader{
@@ -103,13 +100,6 @@ func executeCommand(conn *websocket.Conn, command string) {
 			}
 			if n > 0 {
 				output := string(buf[:n])
-
-				// Handle potential encoding issues by ensuring UTF-8
-				outputBytes := []byte(output)
-				if !utf8.Valid(outputBytes) {
-					output = string(bytes.ToValidUTF8(outputBytes, []byte("")))
-				}
-
 				sendMessage(conn, "output", output)
 			}
 		}
@@ -165,13 +155,6 @@ func main() {
 	fmt.Printf("Go terminal proxy running on %s/ws\n", addr)
 
 	http.HandleFunc("/ws", handleWS)
-
-	if term.IsTerminal(int(os.Stdin.Fd())) {
-		oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
-		if err == nil {
-			defer term.Restore(int(os.Stdin.Fd()), oldState)
-		}
-	}
 
 	server := &http.Server{
 		Addr:         addr,

@@ -8,12 +8,17 @@ export default defineConfig({
       priority: 0,
     },
     {
+      name: 'xterm',
+      match: [/@xterm/],
+      priority: 0,
+    },
+    {
       name: 'network',
       match: [/ws/],
     },
     {
       name: 'utils',
-      match: [/get-port/, /kill-port/, /fancy-ansi/],
+      match: [/get-port/, /kill-port/, /fancy-ansi/, /string-width/],
     },
   ]),
 })

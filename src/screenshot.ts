@@ -1,5 +1,5 @@
 import type { Browser, ChromeReleaseChannel, ElementHandle, PuppeteerNode } from 'puppeteer-core'
-import type { ConfigOptions, ImageFormat, TerminalOutput } from './types'
+import type { ConfigOptions, ImageFormat, ProcessedTerminalOutputs } from './types'
 import { writeFile } from 'node:fs/promises'
 import { extname } from 'node:path'
 import process from 'node:process'
@@ -9,7 +9,6 @@ import { execa } from 'execa'
 import { join } from 'pathe'
 import { IMAGE_FORMAT_CHOICES } from './constants'
 import { generateHTML } from './html'
-import { calculateContainerDimensions } from './utils/dimensions'
 import { parseSpacing } from './utils/parse'
 
 async function installChrome() {
@@ -81,10 +80,10 @@ async function screenshot(cwd: string, path: string, body: ElementHandle<HTMLBod
   p.log.success(c.green`Screenshot saved to: ${c.yellow`${path}`}`)
 }
 
-export async function generateScreenshot(outputs: TerminalOutput[], options: ConfigOptions) {
+export async function generateScreenshot(outputs: ProcessedTerminalOutputs, options: ConfigOptions) {
+  const { width, height } = outputs
   const html = await generateHTML(outputs, options)
 
-  const { width, height } = calculateContainerDimensions(outputs, options)
   const margin = parseSpacing(options.margin)
   const viewportWidth = width + margin.horizontal
   const viewportHeight = height + margin.vertical

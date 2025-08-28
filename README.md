@@ -45,7 +45,7 @@ pnpx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/help_0_3_0.png' />
+<img src='./assets/termsnap.png' />
 </p>
 
 ## Output Formats

@@ -1,14 +1,14 @@
-import type { ConfigOptions, TerminalOutput } from './types'
+import type { ConfigOptions, ProcessedTerminalOutputs } from './types'
 import { createServer } from 'node:http'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
 import { generateHTML } from './html'
-import { calculateContainerDimensions } from './utils/dimensions'
 
-export async function openInBroz(outputs: TerminalOutput[], options: ConfigOptions) {
-  const generateOptions: ConfigOptions = {
+export async function openInBroz(outputs: ProcessedTerminalOutputs, options: ConfigOptions) {
+  const { width, height } = outputs
+  const html = await generateHTML(outputs, {
     ...options,
     border: {
       borderRadius: 0,
@@ -17,9 +17,7 @@ export async function openInBroz(outputs: TerminalOutput[], options: ConfigOptio
     },
     boxShadow: 'none',
     margin: '0',
-  }
-
-  const html = await generateHTML(outputs, generateOptions)
+  })
 
   // Create a simple HTTP server to serve the HTML content
   p.log.info(`Local server running on port ${c.yellow`${options.port}`}`)
@@ -34,7 +32,6 @@ export async function openInBroz(outputs: TerminalOutput[], options: ConfigOptio
     server.on('error', reject)
   })
 
-  const { width, height } = await calculateContainerDimensions(outputs, generateOptions)
   p.log.info(`Opening ${c.cyan`Broz`} with size ${c.yellow`${width}x${height}`}...`)
 
   // Launch broz with the local server URL
