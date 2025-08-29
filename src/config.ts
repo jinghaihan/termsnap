@@ -2,6 +2,7 @@ import type { CommandOptions, ConfigOptions, DeepRequired, ThemeConfig } from '.
 import process from 'node:process'
 import getPort, { portNumbers } from 'get-port'
 import { createConfigLoader } from 'unconfig'
+import { DEFAULT_TYPED_OPTIONS } from './constants'
 import { loadTheme } from './themes'
 
 function normalizeConfig(options: Partial<CommandOptions>) {
@@ -35,13 +36,14 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const screenshot = !!options.png || !!options.jpeg || !!options.webp
 
   options.cwd = options.cwd || process.cwd()
-  options.open = options.open || (!options.html && !options.replay && !screenshot)
+  options.open = options.open || (!options.html && !options.replay && !options.gif && !screenshot)
 
   options.html = normalizeFileExt('html', options.html)
   options.replay = normalizeFileExt('html', options.replay)
   options.png = normalizeFileExt('png', options.png)
   options.jpeg = normalizeFileExt('jpeg', options.jpeg)
   options.webp = normalizeFileExt('webp', options.webp)
+  options.gif = normalizeFileExt('gif', options.gif)
 
   options.port = options.port ? Number(options.port) : 3000
   options.theme = options.theme || 'vitesse-dark'
@@ -65,9 +67,10 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const config = await loader.load()
   const configOptions = config.sources.length ? normalizeConfig(config.config) : {}
   const merged = { ...configOptions, ...options }
-
-  options.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
   const themeConfig = await loadTheme(options.theme, options.force) as DeepRequired<ThemeConfig>
+
+  merged.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
+  merged.typedOptions = { ...DEFAULT_TYPED_OPTIONS, ...merged.typedOptions }
 
   // font config
   themeConfig.font.fontFamily = merged.fontFamily || themeConfig.font.fontFamily

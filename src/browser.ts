@@ -1,14 +1,15 @@
-import type { ConfigOptions, TerminalSnapshot } from './types'
+import type { ConfigOptions, TerminalInteraction, TerminalSnapshot } from './types'
 import { createServer } from 'node:http'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
-import { generateHTML } from './html'
+import { generateAnimatedHTML, generateHTML } from './html'
+import { isAnimatedMode } from './utils/inference'
 
-export async function openInBroz(snapshot: TerminalSnapshot, options: ConfigOptions) {
+export async function openInBroz(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
   const { width, height } = snapshot
-  const html = await generateHTML(snapshot, {
+  const generateOptions: ConfigOptions = {
     ...options,
     border: {
       borderRadius: 0,
@@ -17,7 +18,10 @@ export async function openInBroz(snapshot: TerminalSnapshot, options: ConfigOpti
     },
     boxShadow: 'none',
     margin: '0',
-  })
+  }
+  const html = isAnimatedMode(options)
+    ? await generateAnimatedHTML(interactions, generateOptions)
+    : await generateHTML(snapshot, generateOptions)
 
   // Create a simple HTTP server to serve the HTML content
   p.log.info(`Local server running on port ${c.yellow`${options.port}`}`)

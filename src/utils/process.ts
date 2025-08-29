@@ -3,6 +3,7 @@ import { FancyAnsi, stripAnsi } from 'fancy-ansi'
 import stringWidth from 'string-width'
 import { calculateContainerDimensions } from './dimensions'
 import { getTerminalOutput } from './pty'
+import { prependTypedEffect } from './typed'
 
 const fancyAnsi = new FancyAnsi()
 
@@ -86,21 +87,33 @@ export async function processTerminalOutputs(interactions: TerminalInteraction[]
 }
 
 export async function processAnimationFrames(interactions: TerminalInteraction[], options: ConfigOptions) {
-  const outputData = interactions.filter(i => i.type === 'output')
+  let outputData = interactions.filter(i => i.type === 'output')
   if (outputData.length === 0)
     return []
 
   const startTimestamp = outputData[0].timestamp
+  outputData = outputData.map(item => ({
+    ...item,
+    timestamp: item.timestamp - startTimestamp,
+  }))
+
+  if (options.typed) {
+    outputData = prependTypedEffect(outputData, options.command, options.typedOptions)
+  }
+
   const snapshots: TerminalSnapshot[] = []
 
   let accumulatedAnsi: string = ''
-  for (const output of outputData) {
-    accumulatedAnsi += output.data
+  for (const item of outputData) {
+    accumulatedAnsi += item.data
 
-    const { html, rows, cols, width, height } = await getTerminalDimensions(accumulatedAnsi, options)
+    const { html, rows, cols, width, height } = await getTerminalDimensions(accumulatedAnsi, {
+      ...options,
+      cmd: !options.typed,
+    })
 
     snapshots.push({
-      timestamp: output.timestamp - startTimestamp,
+      timestamp: item.timestamp,
       html,
       rows,
       cols,

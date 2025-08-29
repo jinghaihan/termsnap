@@ -1,5 +1,5 @@
-import type { Browser, ChromeReleaseChannel, ElementHandle, PuppeteerNode } from 'puppeteer-core'
-import type { ConfigOptions, ImageFormat, TerminalSnapshot } from './types'
+import type { Browser, ChromeReleaseChannel, ElementHandle, Page, PuppeteerNode } from 'puppeteer-core'
+import type { ConfigOptions, ImageFormat, TerminalInteraction, TerminalSnapshot } from './types'
 import { writeFile } from 'node:fs/promises'
 import { extname } from 'node:path'
 import process from 'node:process'
@@ -8,7 +8,7 @@ import c from 'ansis'
 import { execa } from 'execa'
 import { join } from 'pathe'
 import { IMAGE_FORMAT_CHOICES } from './constants'
-import { generateHTML } from './html'
+import { generateAnimatedHTML, generateHTML } from './html'
 import { parseSpacing } from './utils/parse'
 
 async function installChrome() {
@@ -80,10 +80,11 @@ async function screenshot(cwd: string, path: string, body: ElementHandle<HTMLBod
   p.log.success(c.green`Screenshot saved to: ${c.yellow`${path}`}`)
 }
 
-export async function generateScreenshot(snapshot: TerminalSnapshot, options: ConfigOptions) {
-  const { width, height } = snapshot
-  const html = await generateHTML(snapshot, options)
-
+async function initPage(html: string, width: number, height: number, options: ConfigOptions): Promise<{
+  browser: Browser
+  page: Page
+  body: ElementHandle<HTMLBodyElement>
+}> {
   const margin = parseSpacing(options.margin)
   const viewportWidth = width + margin.horizontal
   const viewportHeight = height + margin.vertical
@@ -113,6 +114,14 @@ export async function generateScreenshot(snapshot: TerminalSnapshot, options: Co
     document.body.style.backgroundColor = 'transparent'
   })
 
+  return { browser, page, body }
+}
+
+export async function generateScreenshot(snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const { width, height } = snapshot
+  const html = await generateHTML(snapshot, options)
+  const { browser, body } = await initPage(html, width, height, options)
+
   if (options.png) {
     await screenshot(options.cwd, options.png, body)
   }
@@ -124,4 +133,12 @@ export async function generateScreenshot(snapshot: TerminalSnapshot, options: Co
   }
 
   await browser.close()
+}
+
+export async function generateGifScreenshot(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const { width, height } = snapshot
+  const html = await generateAnimatedHTML(interactions, options)
+  const { browser } = await initPage(html, width, height, options)
+
+  browser.close()
 }

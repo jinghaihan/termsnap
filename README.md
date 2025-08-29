@@ -32,19 +32,19 @@ This project leverages Go-based terminal output proxy combined with web renderin
 
 ```sh
 # Browser preview
-pnpx termsnap "command" --open
+pnpx termsnap "command" --open-replay
 
 # Save as HTML file
 pnpx termsnap "command" --html index
-
-# Save as animated HTML file
-pnpx termsnap "command" --replay animated
 
 # Save as screenshot
 pnpx termsnap "command" --png image
 
 # Custom theme and decoration
 pnpx termsnap "command" --open --theme vitesse-light --decoration
+
+# Save as animated HTML file
+pnpx termsnap "command" --replay animated
 ```
 
 <p align='center'>
@@ -76,6 +76,23 @@ You can use any theme from the [iTerm2-Color-Schemes](https://github.com/mbadola
 pnpx termsnap "command" --theme "0x96f"
 ```
 
+## Animated Command Input
+
+When using the `--replay` option to generate animated HTML output, you can customize the typing animation behavior through `typedOptions` configuration:
+
+```typescript
+// termsnap.config.ts
+import { defineConfig } from './src/index'
+
+export default defineConfig({
+  typedOptions: {
+    speed: 100, // Typing speed in milliseconds per character
+    initialDelay: 0, // Initial delay before starting to type
+    pauseAfter: 500 // Pause duration after typing completes
+  }
+})
+```
+
 ## Configuration Options
 
 ### Server Settings
@@ -91,12 +108,16 @@ pnpx termsnap "command" --theme "0x96f"
 - `replay` - Generate animated HTML template and save to file
 - `loop` - Loop the animation for a given number of milliseconds
 - `open` - Open browser after generating HTML template
+- `openReplay` - Open browser after generating animated HTML template
 
 ### Terminal Styling
 - `theme` - Terminal theme (vitesse-dark, vitesse-light, catppuccin variants, etc.)
 - `colors` - Custom terminal color configuration
 - `height` - Terminal height
 - `width` - Terminal width
+- `decoration` - Draw window decorations (minimize, maximize, close buttons)
+- `cmd` - Show command in the terminal
+- `typed` - Typed command in the terminal
 
 ### Font Configuration
 - `fontFamily` - Terminal font family
@@ -111,7 +132,6 @@ pnpx termsnap "command" --theme "0x96f"
 - `boxShadow` - Terminal box shadow
 - `padding` - Terminal padding
 - `margin` - Terminal margin
-- `decoration` - Draw window decorations (minimize, maximize, close buttons)
 
 ## Acknowledgments
 

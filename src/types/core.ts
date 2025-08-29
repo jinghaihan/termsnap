@@ -4,7 +4,9 @@ import type { BorderConfig, ColorTheme, FontConfig, ThemeConfig } from './theme'
 export type ImageFormat = (typeof IMAGE_FORMAT_CHOICES)[number]
 export type BuiltinTheme = (typeof BUILTIN_THEME_CHOICES)[number]
 
-export interface CommandOptions extends CommonOptions, AppearanceOptions {}
+export interface CommandOptions extends CommonOptions, AppearanceOptions {
+  typedOptions?: TypedOptions
+}
 
 export interface CommonOptions {
   cwd?: string
@@ -29,6 +31,10 @@ export interface CommonOptions {
    */
   webp?: string
   /**
+   * Generate a gif and save to file
+   */
+  gif?: string
+  /**
    * Generate HTML template and save to file
    */
   html?: string
@@ -44,6 +50,10 @@ export interface CommonOptions {
    * Open the browser after generating the HTML template
    */
   open?: boolean
+  /**
+   * Open the browser after generating the animated HTML template
+   */
+  openReplay?: boolean
   /**
    * Force to download the theme from remote, even if it's already cached
    */
@@ -72,13 +82,32 @@ export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeC
    */
   cmd?: boolean
   /**
+   * Typed command in the terminal
+   */
+  typed?: boolean
+  /**
    * Draw window decorations (minimize, maximize, and close button)
    */
   decoration?: boolean
 }
 
-export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'decoration' | 'cmd'> {
+export interface TypedOptions {
+  /**
+   * Typing speed in milliseconds per character
+   */
+  speed?: number
+  /**
+   * Initial delay before starting to type
+   */
+  initialDelay?: number
+  /**
+   * Pause after typing completes
+   */
+  pauseAfter?: number
+}
 
+export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'decoration' | 'cmd' | 'typed'> {
+  typedOptions?: TypedOptions
 }
 
 export type DeepRequired<T> = T extends object

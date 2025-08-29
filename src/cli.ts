@@ -9,7 +9,7 @@ import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { GoSession } from './go-session'
 import { generateAnimatedHTML, generateHTML } from './html'
-import { generateScreenshot } from './screenshot'
+import { generateGifScreenshot, generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
 
 try {
@@ -20,6 +20,7 @@ try {
     .option('-p, --port <port>', 'Server port', { default: 3000 })
     .option('--theme <theme>', 'Terminal theme', { default: 'vitesse-dark' })
     .option('--cmd', 'Show command in the terminal', { default: true })
+    .option('--typed', 'Typed command in the terminal', { default: true })
     .option('--decoration', 'Draw window decorations (minimize, maximize, and close button).', { default: false })
     .option('--width <width>', 'Terminal width')
     .option('--height <height>', 'Terminal height')
@@ -37,10 +38,12 @@ try {
     .option('--png [png]', 'Generate a png and save to file')
     .option('--jpeg [jpeg]', 'Generate a jpeg and save to file')
     .option('--webp [webp]', 'Generate a webp and save to file')
+    .option('--gif [gif]', 'Generate a gif and save to file')
     .option('--html [html]', 'Generate HTML template and save to file')
     .option('--replay [replay]', 'Generate animated HTML template and save to file')
     .option('--loop <loop>', 'Loop the animation for a given number of milliseconds')
     .option('--open', 'Open the browser after generating the HTML template', { default: false })
+    .option('--open-replay', 'Open the browser after generating the animated HTML template', { default: false })
     .option('--force', 'Force to download the theme from remote', { default: false })
     .action(async (command: string, options: CommandOptions) => {
       p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
@@ -49,6 +52,7 @@ try {
       const outputHTML = !!config.html
       const outputReplayHTML = !!config.replay
       const outputScreenshot = !!config.screenshot
+      const outputGif = !!config.gif
       const openBrowser = config.open
 
       const session = new GoSession({
@@ -84,8 +88,12 @@ try {
           await generateScreenshot(processed, config)
         }
 
+        if (outputGif) {
+          await generateGifScreenshot(result.interactions, processed, config)
+        }
+
         if (openBrowser) {
-          await openInBroz(processed, config)
+          await openInBroz(result.interactions, processed, config)
         }
 
         p.outro(c.green`Done!`)
