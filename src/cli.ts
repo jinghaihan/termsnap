@@ -19,6 +19,7 @@ try {
     .command('<command>', 'Run a command and capture its output (incl. interactive)')
     .option('-p, --port <port>', 'Server port', { default: 3000 })
     .option('--theme <theme>', 'Terminal theme', { default: 'vitesse-dark' })
+    .option('--cmd', 'Show command in the terminal', { default: true })
     .option('--decoration', 'Draw window decorations (minimize, maximize, and close button).', { default: false })
     .option('--width <width>', 'Terminal width')
     .option('--height <height>', 'Terminal height')

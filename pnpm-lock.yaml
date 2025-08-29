@@ -67,6 +67,13 @@ catalogs:
     tsx:
       specifier: ^4.20.5
       version: 4.20.5
+  terminal:
+    '@xterm/addon-serialize':
+      specifier: ^0.13.0
+      version: 0.13.0
+    '@xterm/headless':
+      specifier: ^5.5.0
+      version: 5.5.0
   test:
     vitest:
       specifier: ^3.2.4
@@ -94,13 +101,6 @@ catalogs:
     string-width:
       specifier: ^8.0.0
       version: 8.0.0
-  xterm:
-    '@xterm/addon-serialize':
-      specifier: ^0.13.0
-      version: 0.13.0
-    '@xterm/headless':
-      specifier: ^5.5.0
-      version: 5.5.0
 
 importers:
 
@@ -110,10 +110,10 @@ importers:
         specifier: catalog:node
         version: 0.11.0
       '@xterm/addon-serialize':
-        specifier: catalog:xterm
+        specifier: catalog:terminal
         version: 0.13.0(@xterm/xterm@5.5.0)
       '@xterm/headless':
-        specifier: catalog:xterm
+        specifier: catalog:terminal
         version: 5.5.0
       ansis:
         specifier: catalog:node

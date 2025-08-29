@@ -68,12 +68,16 @@ export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeC
    */
   width?: number
   /**
+   * Show command in the terminal
+   */
+  cmd?: boolean
+  /**
    * Draw window decorations (minimize, maximize, and close button)
    */
   decoration?: boolean
 }
 
-export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'decoration'> {
+export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'decoration' | 'cmd'> {
 
 }
 

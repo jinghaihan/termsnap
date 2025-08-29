@@ -26,6 +26,9 @@ catalogs:
     puppeteer-core: ^24.17.1
   script:
     tsx: ^4.20.5
+  terminal:
+    '@xterm/addon-serialize': ^0.13.0
+    '@xterm/headless': ^5.5.0
   test:
     vitest: ^3.2.4
   types:
@@ -37,6 +40,3 @@ catalogs:
     get-port: ^7.1.0
     kill-port: 1.6.1
     string-width: ^8.0.0
-  xterm:
-    '@xterm/addon-serialize': ^0.13.0
-    '@xterm/headless': ^5.5.0

@@ -50,8 +50,8 @@
   },
   "dependencies": {
     "@clack/prompts": "catalog:node",
-    "@xterm/addon-serialize": "catalog:xterm",
-    "@xterm/headless": "catalog:xterm",
+    "@xterm/addon-serialize": "catalog:terminal",
+    "@xterm/headless": "catalog:terminal",
     "ansis": "catalog:node",
     "cac": "catalog:node",
     "execa": "catalog:node",

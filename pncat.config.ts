@@ -8,7 +8,7 @@ export default defineConfig({
       priority: 0,
     },
     {
-      name: 'xterm',
+      name: 'terminal',
       match: [/@xterm/],
       priority: 0,
     },
@@ -18,7 +18,13 @@ export default defineConfig({
     },
     {
       name: 'utils',
-      match: [/get-port/, /kill-port/, /fancy-ansi/, /string-width/],
+      match: [
+        /get-port/,
+        /kill-port/,
+        /string-width/,
+        /fancy-ansi/,
+        /html-format/,
+      ],
     },
   ]),
 })
