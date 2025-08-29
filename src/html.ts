@@ -1,14 +1,22 @@
-import type { ConfigOptions, ProcessedTerminalOutputs } from './types'
+import type { ConfigOptions, TerminalInteraction, TerminalSnapshot } from './types'
 import { writeFile } from 'node:fs/promises'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { join } from 'pathe'
 import { DECORATION_BAR_HEIGHT } from './constants'
+import { processAnimationFrames } from './utils/process'
 
-export async function generateHTML(outputs: ProcessedTerminalOutputs, options: ConfigOptions, save: boolean = false): Promise<string> {
-  const { html: terminalHTML } = outputs
+interface GenerateHTMLDocOptions {
+  content?: string
+  script?: string
+  height?: number
+  width?: number
+}
 
-  const html = `
+function generateHTMLDoc(options: ConfigOptions, props: GenerateHTMLDocOptions) {
+  const { content = '', script, height, width } = props
+
+  return `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -52,8 +60,8 @@ export async function generateHTML(outputs: ProcessedTerminalOutputs, options: C
           overflow: auto;
         }
         .terminal-container {
-          width: ${options.width ? `${options.width}px` : 'auto'};
-          height: ${options.height ? `${options.height}px` : 'auto'};
+          width: ${width ? `${width}px` : 'auto'};
+          height: ${height ? `${height}px` : 'auto'};
           font-family: ${options.font.fontFamily};
           font-size: ${options.font.fontSize}px;
           font-weight: ${options.font.fontWeight};
@@ -108,6 +116,7 @@ export async function generateHTML(outputs: ProcessedTerminalOutputs, options: C
         }`
           : ``}
       </style>
+      ${script ? `<script>${script}</script>` : ''}
   </head>
   <body>
     <div class="terminal-container">
@@ -120,19 +129,86 @@ export async function generateHTML(outputs: ProcessedTerminalOutputs, options: C
         </div>
       </div>`
         : ''}
-      <div class="terminal-content">
-        ${terminalHTML}
+      <div id="terminal-content" class="terminal-content">
+        ${content}
       </div>
     </div>
   </body>
   </html>
   `
+}
 
+async function saveHTML(html: string, options: ConfigOptions) {
+  const path = join(options.cwd, options.html)
+  await writeFile(path, html)
+  p.log.success(c.green`HTML saved to ${options.html}`)
+}
+
+export async function generateHTML(snapshot: TerminalSnapshot, options: ConfigOptions, save: boolean = false): Promise<string> {
+  const html = generateHTMLDoc(options, {
+    content: snapshot.html,
+    height: options.height,
+    width: options.width,
+  })
   if (save) {
-    const path = join(options.cwd, options.html)
-    await writeFile(path, html)
-    p.log.success(c.green`HTML saved to ${options.html}`)
+    await saveHTML(html, options)
   }
+  return html
+}
 
+export async function generateAnimatedHTML(interactions: TerminalInteraction[], options: ConfigOptions, save: boolean = false) {
+  const snapshots = await processAnimationFrames(interactions, options)
+  const script = `
+    document.addEventListener('DOMContentLoaded', function() {
+      const loop = ${options.loop}
+      const dom = document.getElementById('terminal-content')
+      const snapshots = ${JSON.stringify(snapshots)}
+
+      let index = 0
+
+      function updateTerminalContent() {
+        if (index < snapshots.length) {
+          const snapshot = snapshots[index]
+          dom.innerHTML = snapshot.html
+          index++
+
+          // Schedule next update based on timestamp difference
+          if (index < snapshots.length) {
+            const next = snapshots[index]
+            const delay = next.timestamp - snapshot.timestamp
+            setTimeout(updateTerminalContent, delay)
+          } else {
+            if (loop) {
+              index = 0
+              setTimeout(updateTerminalContent, loop)
+            }
+          }
+        }
+      }
+
+      if (snapshots.length > 0) {
+        dom.innerHTML = snapshots[0].html
+        index = 1
+
+        if (snapshots.length > 1) {
+          const delay = snapshots[1].timestamp - snapshots[0].timestamp
+          setTimeout(updateTerminalContent, delay)
+        }
+      }
+    })
+  `
+
+  const lastSnapshot = snapshots[snapshots.length - 1]
+  const html = generateHTMLDoc(options, {
+    script,
+    height: options.height || lastSnapshot.height,
+    width: options.width || lastSnapshot.width,
+  })
+  if (save) {
+    await saveHTML(html, {
+      ...options,
+      html: options.replay,
+    })
+  }
   return html
 }

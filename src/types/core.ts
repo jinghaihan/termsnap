@@ -33,6 +33,14 @@ export interface CommonOptions {
    */
   html?: string
   /**
+   * Generate animated HTML template and save to file
+   */
+  replay?: string
+  /**
+   * Loop the animation for a given number of milliseconds
+   */
+  loop?: number
+  /**
    * Open the browser after generating the HTML template
    */
   open?: boolean
@@ -82,10 +90,11 @@ export type ConfigOptions = DeepRequired<Omit<Options, 'height' | 'width'>> & {
   width?: number
 }
 
-export interface ProcessedTerminalOutputs {
+export interface TerminalSnapshot {
   html: string
   rows: number
   cols: number
   width: number
   height: number
+  timestamp?: number
 }

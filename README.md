@@ -37,6 +37,9 @@ pnpx termsnap "command" --open
 # Save as HTML file
 pnpx termsnap "command" --html index
 
+# Save as animated HTML file
+pnpx termsnap "command" --replay animated
+
 # Save as screenshot
 pnpx termsnap "command" --png image
 
@@ -45,7 +48,7 @@ pnpx termsnap "command" --open --theme vitesse-light --decoration
 ```
 
 <p align='center'>
-<img src='./assets/termsnap.png' />
+<img src='./assets/help.png' />
 </p>
 
 ## Output Formats
@@ -85,6 +88,8 @@ pnpx termsnap "command" --theme "0x96f"
 - `jpeg` - Generate jpeg and save to file
 - `webp` - Generate webp and save to file
 - `html` - Generate HTML template and save to file
+- `replay` - Generate animated HTML template and save to file
+- `loop` - Loop the animation for a given number of milliseconds
 - `open` - Open browser after generating HTML template
 
 ### Terminal Styling

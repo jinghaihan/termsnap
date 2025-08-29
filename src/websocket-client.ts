@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer'
-import type { TerminalOutput, WebSocketMessage } from './types'
+import type { TerminalInteraction, WebSocketMessage } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
@@ -9,16 +9,16 @@ export interface WebSocketClientOptions {
   port: number
   command: string
   onError: (exitCode: number) => Promise<void>
-  onFinished: (outputs: TerminalOutput[]) => Promise<void>
+  onFinished: (interactions: TerminalInteraction[]) => Promise<void>
 }
 
 export class WebSocketClient {
   private ws: WebSocket | null = null
   private url: string
   private command: string
-  private outputs: TerminalOutput[] = []
+  private interactions: TerminalInteraction[] = []
   private onError: (exitCode: number) => Promise<void>
-  private onFinished: (outputs: TerminalOutput[]) => Promise<void>
+  private onFinished: (interactions: TerminalInteraction[]) => Promise<void>
 
   constructor(options: WebSocketClientOptions) {
     this.url = `ws://localhost:${options.port}/ws`
@@ -47,7 +47,7 @@ export class WebSocketClient {
     })
 
     this.ws.on('close', async () => {
-      await this.onFinished(this.outputs)
+      await this.onFinished(this.interactions)
     })
   }
 
@@ -64,7 +64,7 @@ export class WebSocketClient {
 
   private async onMessage(message: WebSocketMessage) {
     if (message.type === 'output' || message.type === 'error') {
-      this.outputs.push({
+      this.interactions.push({
         type: message.type,
         data: message.data,
         timestamp: message.timestamp,
@@ -104,6 +104,7 @@ export class WebSocketClient {
         data: data.toString(),
         timestamp: Date.now(),
       }
+      this.interactions.push(inputMessage)
       this.send(inputMessage)
     })
   }
@@ -115,6 +116,7 @@ export class WebSocketClient {
       data: this.command,
       timestamp: Date.now(),
     }
+    this.interactions.push(commandMessage)
     this.send(commandMessage)
   }
 

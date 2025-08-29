@@ -1,5 +1,5 @@
 import type { Browser, ChromeReleaseChannel, ElementHandle, PuppeteerNode } from 'puppeteer-core'
-import type { ConfigOptions, ImageFormat, ProcessedTerminalOutputs } from './types'
+import type { ConfigOptions, ImageFormat, TerminalSnapshot } from './types'
 import { writeFile } from 'node:fs/promises'
 import { extname } from 'node:path'
 import process from 'node:process'
@@ -80,9 +80,9 @@ async function screenshot(cwd: string, path: string, body: ElementHandle<HTMLBod
   p.log.success(c.green`Screenshot saved to: ${c.yellow`${path}`}`)
 }
 
-export async function generateScreenshot(outputs: ProcessedTerminalOutputs, options: ConfigOptions) {
-  const { width, height } = outputs
-  const html = await generateHTML(outputs, options)
+export async function generateScreenshot(snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const { width, height } = snapshot
+  const html = await generateHTML(snapshot, options)
 
   const margin = parseSpacing(options.margin)
   const viewportWidth = width + margin.horizontal

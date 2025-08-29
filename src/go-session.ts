@@ -1,5 +1,5 @@
 import type { ResultPromise } from 'execa'
-import type { TerminalOutput } from './types'
+import type { TerminalInteraction } from './types'
 import type { WebSocketClientOptions } from './websocket-client'
 import process from 'node:process'
 import * as p from '@clack/prompts'
@@ -14,13 +14,13 @@ export interface GoSessionOptions extends Pick<WebSocketClientOptions, 'port' | 
 
 export interface GoSessionResult {
   exitCode: number
-  outputs: TerminalOutput[]
+  interactions: TerminalInteraction[]
 }
 
 export class GoSession {
   private port: number
   private command: string
-  private outputs: TerminalOutput[] = []
+  private interactions: TerminalInteraction[] = []
   private goProcess: ResultPromise | null = null
   private wsClient: WebSocketClient | null = null
   private exitCode = 0
@@ -47,7 +47,7 @@ export class GoSession {
     if (!ready) {
       p.outro(c.red('Failed to start the Go server'))
       await this.stop(1)
-      return { exitCode: 1, outputs: [] }
+      return { exitCode: 1, interactions: [] }
     }
 
     return await new Promise<GoSessionResult>((resolve) => {
@@ -60,10 +60,10 @@ export class GoSession {
           if (code !== 0)
             process.exit(code)
         },
-        onFinished: async (outputs) => {
-          this.outputs = outputs
+        onFinished: async (interactions) => {
+          this.interactions = interactions
           await this.stop(this.exitCode)
-          resolve({ exitCode: this.exitCode || 0, outputs: this.outputs })
+          resolve({ exitCode: this.exitCode || 0, interactions: this.interactions })
         },
       })
       this.wsClient.connect()

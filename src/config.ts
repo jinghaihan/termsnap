@@ -35,9 +35,10 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const screenshot = !!options.png || !!options.jpeg || !!options.webp
 
   options.cwd = options.cwd || process.cwd()
-  options.open = options.open || (!options.html && !screenshot)
+  options.open = options.open || (!options.html && !options.replay && !screenshot)
 
   options.html = normalizeFileExt('html', options.html)
+  options.replay = normalizeFileExt('html', options.replay)
   options.png = normalizeFileExt('png', options.png)
   options.jpeg = normalizeFileExt('jpeg', options.jpeg)
   options.webp = normalizeFileExt('webp', options.webp)
@@ -47,6 +48,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   options.decoration = options.decoration || false
   options.force = options.force || false
   options.dpi = options.dpi || 2
+  options.loop = options.loop || 0
 
   const loader = createConfigLoader<CommandOptions>({
     sources: [

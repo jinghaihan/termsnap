@@ -8,7 +8,7 @@ import { name, version } from '../package.json'
 import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { GoSession } from './go-session'
-import { generateHTML } from './html'
+import { generateAnimatedHTML, generateHTML } from './html'
 import { generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
 
@@ -37,6 +37,8 @@ try {
     .option('--jpeg [jpeg]', 'Generate a jpeg and save to file')
     .option('--webp [webp]', 'Generate a webp and save to file')
     .option('--html [html]', 'Generate HTML template and save to file')
+    .option('--replay [replay]', 'Generate animated HTML template and save to file')
+    .option('--loop <loop>', 'Loop the animation for a given number of milliseconds')
     .option('--open', 'Open the browser after generating the HTML template', { default: false })
     .option('--force', 'Force to download the theme from remote', { default: false })
     .action(async (command: string, options: CommandOptions) => {
@@ -44,6 +46,7 @@ try {
 
       const config = await resolveConfig(command, options)
       const outputHTML = !!config.html
+      const outputReplayHTML = !!config.replay
       const outputScreenshot = !!config.screenshot
       const openBrowser = config.open
 
@@ -67,9 +70,13 @@ try {
         if (result.exitCode !== 0)
           process.exit(result.exitCode)
 
-        const processed = await processTerminalOutputs(result.outputs, config)
+        const processed = await processTerminalOutputs(result.interactions, config)
         if (outputHTML) {
           await generateHTML(processed, config, true)
+        }
+
+        if (outputReplayHTML) {
+          await generateAnimatedHTML(result.interactions, config, true)
         }
 
         if (outputScreenshot) {

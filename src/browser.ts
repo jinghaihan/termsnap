@@ -1,4 +1,4 @@
-import type { ConfigOptions, ProcessedTerminalOutputs } from './types'
+import type { ConfigOptions, TerminalSnapshot } from './types'
 import { createServer } from 'node:http'
 import process from 'node:process'
 import * as p from '@clack/prompts'
@@ -6,9 +6,9 @@ import c from 'ansis'
 import { execa } from 'execa'
 import { generateHTML } from './html'
 
-export async function openInBroz(outputs: ProcessedTerminalOutputs, options: ConfigOptions) {
-  const { width, height } = outputs
-  const html = await generateHTML(outputs, {
+export async function openInBroz(snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const { width, height } = snapshot
+  const html = await generateHTML(snapshot, {
     ...options,
     border: {
       borderRadius: 0,
