@@ -2,6 +2,8 @@ import type { TypedOptions } from '../types'
 
 export const IMAGE_FORMAT_CHOICES = ['png', 'jpeg', 'webp'] as const
 
+export const VIDEO_FORMAT_CHOICES = ['mp4', 'avi', 'mov', 'webm'] as const
+
 export const BUILTIN_THEME_CHOICES = [
   'vitesse-dark',
   'vitesse-light',

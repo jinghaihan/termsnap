@@ -8,7 +8,7 @@
 Creates beautiful screenshots of terminal command output with full local font and emoji support.
 
 ```sh
-pnpx termsnap "lolcat -f <(figlet -f banner3 termsnap)"
+npx termsnap "lolcat -f <(figlet -f banner3 termsnap)"
 ```
 
 <p align='center'>
@@ -22,29 +22,31 @@ This project leverages Go-based terminal output proxy combined with web renderin
 - **Interactive Terminal Support**: Capture interactive terminal sessions through Go-based terminal output proxy
 - **Local Font & Emoji Support**: Perfect rendering of your system fonts and emoji characters
 - **Customizable Themes**: Extensive theme customization through configuration files
-- **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), or browser preview
+- **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), videos (MP4/AVI/MOV/WebM), or browser preview
+- **Replay Animation**: Generate animated HTML or video output with typing effects
 
-<p align='center'>
-<img src='./assets/emoji.png' />
-</p>
+[![Click to preview video](assets/emoji.png)](https://raw.githubusercontent.com/jinghaihan/termsnap/refs/heads/main/assets/emoji.mp4)
 
 ## Usage Examples
 
 ```sh
 # Browser preview
-pnpx termsnap "command" --open-replay
+npx termsnap "command" --open-replay
 
 # Save as HTML file
-pnpx termsnap "command" --html index
+npx termsnap "command" --html index
 
 # Save as screenshot
-pnpx termsnap "command" --png image
+npx termsnap "command" --png image
+
+# Save as video
+npx termsnap "command" --mp4 video --fps 60
 
 # Custom theme and decoration
-pnpx termsnap "command" --open --theme vitesse-light --decoration
+npx termsnap "command" --open --theme vitesse-light --decoration
 
 # Save as animated HTML file
-pnpx termsnap "command" --replay animated
+npx termsnap "command" --replay animated
 ```
 
 <p align='center'>
@@ -57,6 +59,7 @@ Generate your terminal output in multiple formats:
 
 - **HTML**: Save as standalone HTML file with embedded styling
 - **Images**: Export as PNG, JPEG, or WebP formats
+- **Videos**: Export as MP4, AVI, MOV, or WebM formats with customizable frame rate
 - **Browser Preview**: Open directly in browser (powered by [Broz](https://github.com/antfu/broz))
 
 ## Theme Customization
@@ -73,7 +76,7 @@ You can use any theme from the [iTerm2-Color-Schemes](https://github.com/mbadola
 
 ```sh
 # Use a remote theme (e.g., 0x96f)
-pnpx termsnap "command" --theme "0x96f"
+npx termsnap "command" --theme "0x96f"
 ```
 
 ## Animated Command Input
@@ -104,6 +107,11 @@ export default defineConfig({
 - `png` - Generate png and save to file
 - `jpeg` - Generate jpeg and save to file
 - `webp` - Generate webp and save to file
+- `fps` - Frames per second for video output (default: 60)
+- `mp4` - Generate mp4 video and save to file
+- `avi` - Generate avi video and save to file
+- `mov` - Generate mov video and save to file
+- `webm` - Generate webm video and save to file
 - `html` - Generate HTML template and save to file
 - `replay` - Generate animated HTML template and save to file
 - `loop` - Loop the animation for a given number of milliseconds
@@ -132,6 +140,11 @@ export default defineConfig({
 - `boxShadow` - Terminal box shadow
 - `padding` - Terminal padding
 - `margin` - Terminal margin
+
+### Typed Configuration
+- `speed` - Typing speed in milliseconds per character
+- `initialDelay` - Initial delay before starting to type
+- `pauseAfter` - Pause after typing completes
 
 ## Acknowledgments
 

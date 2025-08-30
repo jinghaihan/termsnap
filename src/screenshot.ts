@@ -1,14 +1,13 @@
 import type { Browser, ChromeReleaseChannel, ElementHandle, Page, PuppeteerNode } from 'puppeteer-core'
-import type { ConfigOptions, ImageFormat, TerminalInteraction, TerminalSnapshot } from './types'
+import type { ConfigOptions, ImageFormat, TerminalSnapshot } from './types'
 import { writeFile } from 'node:fs/promises'
-import { extname } from 'node:path'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
-import { join } from 'pathe'
+import { extname, join } from 'pathe'
 import { IMAGE_FORMAT_CHOICES } from './constants'
-import { generateAnimatedHTML, generateHTML } from './html'
+import { generateHTML } from './html'
 import { parseSpacing } from './utils/parse'
 
 async function installChrome() {
@@ -80,7 +79,7 @@ async function screenshot(cwd: string, path: string, body: ElementHandle<HTMLBod
   p.log.success(c.green`Screenshot saved to: ${c.yellow`${path}`}`)
 }
 
-async function initPage(html: string, width: number, height: number, options: ConfigOptions): Promise<{
+export async function initPage(html: string, width: number, height: number, options: ConfigOptions): Promise<{
   browser: Browser
   page: Page
   body: ElementHandle<HTMLBodyElement>
@@ -133,12 +132,4 @@ export async function generateScreenshot(snapshot: TerminalSnapshot, options: Co
   }
 
   await browser.close()
-}
-
-export async function generateGifScreenshot(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
-  const { width, height } = snapshot
-  const html = await generateAnimatedHTML(interactions, options)
-  const { browser } = await initPage(html, width, height, options)
-
-  browser.close()
 }

@@ -59,7 +59,8 @@
     "get-port": "catalog:utils",
     "kill-port": "catalog:utils",
     "pathe": "catalog:node",
-    "puppeteer-core": "catalog:screeshot",
+    "puppeteer-core": "catalog:browser",
+    "puppeteer-screen-recorder": "catalog:browser",
     "string-width": "catalog:utils",
     "unconfig": "catalog:node",
     "ws": "catalog:network"

@@ -1,5 +1,8 @@
 packages: []
 catalogs:
+  browser:
+    puppeteer-core: ^24.17.1
+    puppeteer-screen-recorder: ^3.0.6
   build:
     unbuild: ^3.6.1
   cli:
@@ -22,8 +25,6 @@ catalogs:
     execa: ^9.6.0
     pathe: ^2.0.3
     unconfig: ^7.3.3
-  screeshot:
-    puppeteer-core: ^24.17.1
   script:
     tsx: ^4.20.5
   terminal:

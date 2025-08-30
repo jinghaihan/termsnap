@@ -156,7 +156,7 @@ export async function generateHTML(snapshot: TerminalSnapshot, options: ConfigOp
   return html
 }
 
-export async function generateAnimatedHTML(interactions: TerminalInteraction[], options: ConfigOptions, save: boolean = false) {
+export async function generateAnimatedHTML(interactions: TerminalInteraction[], options: ConfigOptions, save: boolean = false, wait: boolean = false) {
   const snapshots = await processAnimationFrames(interactions, options)
   const script = `
     document.addEventListener('DOMContentLoaded', function() {
@@ -178,6 +178,9 @@ export async function generateAnimatedHTML(interactions: TerminalInteraction[], 
             const delay = next.timestamp - snapshot.timestamp
             setTimeout(updateTerminalContent, delay)
           } else {
+            if (window.onAnimationDone) {
+              window.onAnimationDone()
+            }
             if (loop) {
               index = 0
               setTimeout(updateTerminalContent, loop)
@@ -186,15 +189,19 @@ export async function generateAnimatedHTML(interactions: TerminalInteraction[], 
         }
       }
 
-      if (snapshots.length > 0) {
-        dom.innerHTML = snapshots[0].html
-        index = 1
+      function onAnimationStart() {
+        if (snapshots.length > 0) {
+          dom.innerHTML = snapshots[0].html
+          index = 1
 
-        if (snapshots.length > 1) {
-          const delay = snapshots[1].timestamp - snapshots[0].timestamp
-          setTimeout(updateTerminalContent, delay)
+          if (snapshots.length > 1) {
+            const delay = snapshots[1].timestamp - snapshots[0].timestamp
+            setTimeout(updateTerminalContent, delay)
+          }
         }
       }
+      window.onAnimationStart = onAnimationStart
+      ${wait ? '' : 'onAnimationStart()'}
     })
   `
 
@@ -211,4 +218,17 @@ export async function generateAnimatedHTML(interactions: TerminalInteraction[], 
     })
   }
   return html
+}
+
+export function getPureTerminalOptions(options: ConfigOptions): ConfigOptions {
+  return {
+    ...options,
+    border: {
+      borderRadius: 0,
+      borderWidth: 0,
+      borderColor: 'transparent',
+    },
+    boxShadow: 'none',
+    margin: '0',
+  }
 }

@@ -1,7 +1,10 @@
-import type { BUILTIN_THEME_CHOICES, IMAGE_FORMAT_CHOICES } from '../constants'
+import type { BUILTIN_THEME_CHOICES, IMAGE_FORMAT_CHOICES, VIDEO_FORMAT_CHOICES } from '../constants'
 import type { BorderConfig, ColorTheme, FontConfig, ThemeConfig } from './theme'
 
 export type ImageFormat = (typeof IMAGE_FORMAT_CHOICES)[number]
+
+export type VideoFormat = (typeof VIDEO_FORMAT_CHOICES)[number]
+
 export type BuiltinTheme = (typeof BUILTIN_THEME_CHOICES)[number]
 
 export interface CommandOptions extends CommonOptions, AppearanceOptions {
@@ -31,9 +34,25 @@ export interface CommonOptions {
    */
   webp?: string
   /**
-   * Generate a gif and save to file
+   * Frames per second for mp4
    */
-  gif?: string
+  fps?: number
+  /**
+   * Generate a mp4 and save to file
+   */
+  mp4?: string
+  /**
+   * Generate a avi and save to file
+   */
+  avi?: string
+  /**
+   * Generate a mov and save to file
+   */
+  mov?: string
+  /**
+   * Generate a webm and save to file
+   */
+  webm?: string
   /**
    * Generate HTML template and save to file
    */
@@ -119,6 +138,7 @@ export type DeepRequired<T> = T extends object
 export type ConfigOptions = DeepRequired<Omit<Options, 'height' | 'width'>> & {
   command: string
   screenshot: boolean
+  video: boolean
   height?: number
   width?: number
 }

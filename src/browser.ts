@@ -4,21 +4,12 @@ import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
-import { generateAnimatedHTML, generateHTML } from './html'
+import { generateAnimatedHTML, generateHTML, getPureTerminalOptions } from './html'
 import { isAnimatedMode } from './utils/inference'
 
 export async function openInBroz(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
   const { width, height } = snapshot
-  const generateOptions: ConfigOptions = {
-    ...options,
-    border: {
-      borderRadius: 0,
-      borderWidth: 0,
-      borderColor: 'transparent',
-    },
-    boxShadow: 'none',
-    margin: '0',
-  }
+  const generateOptions = getPureTerminalOptions(options)
   const html = isAnimatedMode(options)
     ? await generateAnimatedHTML(interactions, generateOptions)
     : await generateHTML(snapshot, generateOptions)

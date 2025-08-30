@@ -9,7 +9,8 @@ import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { GoSession } from './go-session'
 import { generateAnimatedHTML, generateHTML } from './html'
-import { generateGifScreenshot, generateScreenshot } from './screenshot'
+import { generateVideo } from './recorder'
+import { generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
 
 try {
@@ -38,7 +39,11 @@ try {
     .option('--png [png]', 'Generate a png and save to file')
     .option('--jpeg [jpeg]', 'Generate a jpeg and save to file')
     .option('--webp [webp]', 'Generate a webp and save to file')
-    .option('--gif [gif]', 'Generate a gif and save to file')
+    .option('--fps <fps>', 'Frames per second for mp4', { default: 60 })
+    .option('--mp4 [mp4]', 'Generate a mp4 and save to file')
+    .option('--avi [avi]', 'Generate a avi and save to file')
+    .option('--mov [mov]', 'Generate a mov and save to file')
+    .option('--webm [webm]', 'Generate a webm and save to file')
     .option('--html [html]', 'Generate HTML template and save to file')
     .option('--replay [replay]', 'Generate animated HTML template and save to file')
     .option('--loop <loop>', 'Loop the animation for a given number of milliseconds')
@@ -52,7 +57,7 @@ try {
       const outputHTML = !!config.html
       const outputReplayHTML = !!config.replay
       const outputScreenshot = !!config.screenshot
-      const outputGif = !!config.gif
+      const outputVideo = !!config.video
       const openBrowser = config.open
 
       const session = new GoSession({
@@ -88,8 +93,8 @@ try {
           await generateScreenshot(processed, config)
         }
 
-        if (outputGif) {
-          await generateGifScreenshot(result.interactions, processed, config)
+        if (outputVideo) {
+          await generateVideo(result.interactions, processed, config)
         }
 
         if (openBrowser) {

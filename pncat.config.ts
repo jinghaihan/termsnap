@@ -3,7 +3,7 @@ import { defineConfig, mergeCatalogRules } from 'pncat'
 export default defineConfig({
   catalogRules: mergeCatalogRules([
     {
-      name: 'screeshot',
+      name: 'browser',
       match: [/puppeteer/],
       priority: 0,
     },

@@ -33,23 +33,34 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
     }
   }
 
+  const html = !!options.html || !!options.replay
   const screenshot = !!options.png || !!options.jpeg || !!options.webp
+  const video = !!options.mp4 || !!options.avi || !!options.mov || !!options.webm
 
   options.cwd = options.cwd || process.cwd()
-  options.open = options.open || (!options.html && !options.replay && !options.gif && !screenshot)
+  options.open = options.open || (!html && !video && !screenshot)
 
+  // html
   options.html = normalizeFileExt('html', options.html)
   options.replay = normalizeFileExt('html', options.replay)
+
+  // image
   options.png = normalizeFileExt('png', options.png)
   options.jpeg = normalizeFileExt('jpeg', options.jpeg)
   options.webp = normalizeFileExt('webp', options.webp)
-  options.gif = normalizeFileExt('gif', options.gif)
+
+  // video
+  options.mp4 = normalizeFileExt('mp4', options.mp4)
+  options.avi = normalizeFileExt('avi', options.avi)
+  options.mov = normalizeFileExt('mov', options.mov)
+  options.webm = normalizeFileExt('webm', options.webm)
 
   options.port = options.port ? Number(options.port) : 3000
   options.theme = options.theme || 'vitesse-dark'
   options.decoration = options.decoration || false
   options.force = options.force || false
   options.dpi = options.dpi || 2
+  options.fps = options.fps || 60
   options.loop = options.loop || 0
 
   const loader = createConfigLoader<CommandOptions>({
@@ -88,5 +99,5 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   themeConfig.padding = merged.padding || themeConfig.padding
   themeConfig.margin = merged.margin || themeConfig.margin
 
-  return { command, screenshot, ...merged, ...themeConfig } as ConfigOptions
+  return { command, screenshot, video, ...merged, ...themeConfig } as ConfigOptions
 }
