@@ -9,7 +9,7 @@ import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { GoSession } from './go-session'
 import { generateAnimatedHTML, generateHTML } from './html'
-import { generateVideo } from './recorder'
+import { generateGIF, generateVideo } from './recorder'
 import { generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
 
@@ -39,6 +39,9 @@ try {
     .option('--png [png]', 'Generate a png and save to file')
     .option('--jpeg [jpeg]', 'Generate a jpeg and save to file')
     .option('--webp [webp]', 'Generate a webp and save to file')
+    .option('--gif-fps <gif-fps>', 'Frames per second for gif', { default: 20 })
+    .option('--gif-scale <gif-scale>', 'Scale for gif', { default: 720 })
+    .option('--gif [gif]', 'Generate a gif and save to file')
     .option('--fps <fps>', 'Frames per second for mp4', { default: 60 })
     .option('--mp4 [mp4]', 'Generate a mp4 and save to file')
     .option('--avi [avi]', 'Generate a avi and save to file')
@@ -50,6 +53,7 @@ try {
     .option('--open', 'Open the browser after generating the HTML template', { default: false })
     .option('--open-replay', 'Open the browser after generating the animated HTML template', { default: false })
     .option('--force', 'Force to download the theme from remote', { default: false })
+    .option('--ffmpeg <ffmpeg>', 'FFmpeg path')
     .action(async (command: string, options: CommandOptions) => {
       p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
 
@@ -58,6 +62,7 @@ try {
       const outputReplayHTML = !!config.replay
       const outputScreenshot = !!config.screenshot
       const outputVideo = !!config.video
+      const outputGIF = !!config.gif
       const openBrowser = config.open
 
       const session = new GoSession({
@@ -95,6 +100,10 @@ try {
 
         if (outputVideo) {
           await generateVideo(result.interactions, processed, config)
+        }
+
+        if (outputGIF) {
+          await generateGIF(result.interactions, processed, config)
         }
 
         if (openBrowser) {

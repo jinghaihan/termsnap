@@ -1,7 +1,7 @@
 {
   "name": "termsnap",
   "type": "module",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "packageManager": "pnpm@10.15.0",
   "description": "📸 Creates beautiful screenshots based on terminal command output.",
   "author": "jinghaihan",
@@ -16,7 +16,10 @@
   },
   "keywords": [
     "terminal",
-    "screenshot"
+    "screenshot",
+    "capture",
+    "video",
+    "gif"
   ],
   "exports": {
     ".": "./dist/index.mjs",
@@ -61,9 +64,13 @@
     "pathe": "catalog:node",
     "puppeteer-core": "catalog:browser",
     "puppeteer-screen-recorder": "catalog:browser",
+    "rimraf": "catalog:node",
     "string-width": "catalog:utils",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
+  },
+  "optionalDependencies": {
+    "@ffmpeg-installer/ffmpeg": "catalog:ffmpeg"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:lint",
@@ -80,6 +87,9 @@
     "typescript": "catalog:dev",
     "unbuild": "catalog:build",
     "vitest": "catalog:test"
+  },
+  "resolutions": {
+    "@ffmpeg-installer/ffmpeg": "1.1.0"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

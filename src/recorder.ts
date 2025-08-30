@@ -1,5 +1,9 @@
 import type { ConfigOptions, TerminalInteraction, TerminalSnapshot, VideoFormat } from './types'
+import * as p from '@clack/prompts'
+import c from 'ansis'
+import { execa } from 'execa'
 import { extname, join } from 'pathe'
+import { rimraf } from 'rimraf'
 import { VIDEO_FORMAT_CHOICES } from './constants'
 import { generateAnimatedHTML, getPureTerminalOptions } from './html'
 import { initPage } from './screenshot'
@@ -36,17 +40,19 @@ async function saveVideo(path: string, interactions: TerminalInteraction[], snap
 
   const done = new Promise<void>((resolve) => {
     page.exposeFunction('onAnimationDone', async () => {
+      p.log.info(`Stopping to record video...`)
       await recorder.stop()
       await browser.close()
       resolve()
     })
   })
 
+  p.log.info(`Starting to record video...`)
   await recorder.start(join(options.cwd, path))
   // @ts-expect-error - trigger animation
   await page.evaluate(() => window.onAnimationStart())
-
   await done
+  p.log.success(c.green`Video saved to: ${c.yellow`${path}`}`)
 }
 
 async function generateMP4(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
@@ -77,5 +83,52 @@ export async function generateVideo(interactions: TerminalInteraction[], snapsho
   }
   if (options.webm) {
     await generateWEBM(interactions, snapshot, options)
+  }
+}
+
+async function getVideoPath(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const videoPath = options.mp4 || options.avi || options.mov || options.webm
+  if (videoPath) {
+    return { path: join(options.cwd, videoPath) }
+  }
+  else {
+    const tempVideo = `${options.gif}.mp4`
+    await generateMP4(interactions, snapshot, { ...options, mp4: tempVideo })
+    return { path: join(options.cwd, tempVideo), isTemp: true }
+  }
+}
+
+export async function generateGIF(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
+  const { path: videoPath, isTemp } = await getVideoPath(interactions, snapshot, options)
+
+  await rimraf(options.gif)
+  const spinner = p.spinner()
+  spinner.start(`Generating GIF palette...`)
+
+  const palettePath = `${options.gif}.palette.png`
+  await execa(options.ffmpeg, [
+    '-i',
+    videoPath,
+    '-vf',
+    `fps=${options.gifFps},scale=${options.gifScale}:-1:flags=lanczos,palettegen`,
+    palettePath,
+  ])
+
+  spinner.message(`Generating GIF...`)
+  await execa(options.ffmpeg, [
+    '-i',
+    videoPath,
+    '-i',
+    palettePath,
+    '-filter_complex',
+    `fps=${options.gifFps},scale=${options.gifScale}:-1:flags=lanczos[x];[x][1:v]paletteuse`,
+    options.gif,
+  ])
+  spinner.stop(c.green`GIF saved to: ${c.yellow`${options.gif}`}`)
+
+  // cleanup temporary files
+  await rimraf(palettePath)
+  if (isTemp) {
+    await rimraf(videoPath)
   }
 }

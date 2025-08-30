@@ -1,6 +1,9 @@
 import { defineConfig, mergeCatalogRules } from 'pncat'
 
 export default defineConfig({
+  depFields: {
+    optionalDependencies: true,
+  },
   catalogRules: mergeCatalogRules([
     {
       name: 'browser',
@@ -10,6 +13,11 @@ export default defineConfig({
     {
       name: 'terminal',
       match: [/@xterm/],
+      priority: 0,
+    },
+    {
+      name: 'ffmpeg',
+      match: [/@ffmpeg-installer/],
       priority: 0,
     },
     {

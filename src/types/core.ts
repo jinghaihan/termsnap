@@ -34,6 +34,18 @@ export interface CommonOptions {
    */
   webp?: string
   /**
+   * Frames per second for gif
+   */
+  gifFps?: number
+  /**
+   * Scale for gif
+   */
+  gifScale?: number
+  /**
+   * Generate a gif and save to file
+   */
+  gif?: string
+  /**
    * Frames per second for mp4
    */
   fps?: number
@@ -77,6 +89,10 @@ export interface CommonOptions {
    * Force to download the theme from remote, even if it's already cached
    */
   force?: boolean
+  /**
+   * FFmpeg path
+   */
+  ffmpeg?: string
 }
 
 export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeConfig, 'boxShadow' | 'padding' | 'margin'> {

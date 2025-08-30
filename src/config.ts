@@ -38,7 +38,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const video = !!options.mp4 || !!options.avi || !!options.mov || !!options.webm
 
   options.cwd = options.cwd || process.cwd()
-  options.open = options.open || (!html && !video && !screenshot)
+  options.open = options.open || (!html && !video && !screenshot && !options.gif)
 
   // html
   options.html = normalizeFileExt('html', options.html)
@@ -48,6 +48,11 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   options.png = normalizeFileExt('png', options.png)
   options.jpeg = normalizeFileExt('jpeg', options.jpeg)
   options.webp = normalizeFileExt('webp', options.webp)
+
+  // gif
+  options.gif = normalizeFileExt('gif', options.gif)
+  options.gifFps = options.gifFps || 20
+  options.gifScale = options.gifScale || 720
 
   // video
   options.mp4 = normalizeFileExt('mp4', options.mp4)
@@ -99,5 +104,25 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   themeConfig.padding = merged.padding || themeConfig.padding
   themeConfig.margin = merged.margin || themeConfig.margin
 
-  return { command, screenshot, video, ...merged, ...themeConfig } as ConfigOptions
+  return {
+    command,
+    screenshot,
+    video,
+    ffmpeg: await getFFmpegPath(merged),
+    ...merged,
+    ...themeConfig,
+  } as ConfigOptions
+}
+
+async function getFFmpegPath(options: Partial<CommandOptions>) {
+  if (options.ffmpeg)
+    return options.ffmpeg
+
+  try {
+    const { default: ffmpeg } = await import('@ffmpeg-installer/ffmpeg')
+    return ffmpeg.path
+  }
+  catch {
+    return 'ffmpeg'
+  }
 }

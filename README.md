@@ -22,10 +22,12 @@ This project leverages Go-based terminal output proxy combined with web renderin
 - **Interactive Terminal Support**: Capture interactive terminal sessions through Go-based terminal output proxy
 - **Local Font & Emoji Support**: Perfect rendering of your system fonts and emoji characters
 - **Customizable Themes**: Extensive theme customization through configuration files
-- **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), videos (MP4/AVI/MOV/WebM), or browser preview
+- **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), animated GIFs, videos (MP4/AVI/MOV/WebM), or browser preview
 - **Replay Animation**: Generate animated HTML or video output with typing effects
 
-[![Click to preview video](assets/emoji.png)](https://raw.githubusercontent.com/jinghaihan/termsnap/refs/heads/main/assets/emoji.mp4)
+<p align='center'>
+<img src='./assets/emoji.png' />
+</p>
 
 ## Usage Examples
 
@@ -41,6 +43,9 @@ npx termsnap "command" --png image
 
 # Save as video
 npx termsnap "command" --mp4 video --fps 60
+
+# Save as animated GIF
+npx termsnap "command" --gif animation --gif-fps 20 --gif-scale 720
 
 # Custom theme and decoration
 npx termsnap "command" --open --theme vitesse-light --decoration
@@ -59,8 +64,14 @@ Generate your terminal output in multiple formats:
 
 - **HTML**: Save as standalone HTML file with embedded styling
 - **Images**: Export as PNG, JPEG, or WebP formats
+- **Animated GIFs**: Export as optimized GIF with customizable frame rate and scale
 - **Videos**: Export as MP4, AVI, MOV, or WebM formats with customizable frame rate
 - **Browser Preview**: Open directly in browser (powered by [Broz](https://github.com/antfu/broz))
+
+<div align="center">
+  <img src="/assets/help.gif" alt="dark" width="45%">
+  <img src="/assets/emoji.gif" alt="light" width="50%">
+</div>
 
 ## Theme Customization
 
@@ -107,6 +118,9 @@ export default defineConfig({
 - `png` - Generate png and save to file
 - `jpeg` - Generate jpeg and save to file
 - `webp` - Generate webp and save to file
+- `gif` - Generate animated gif and save to file
+- `gifFps` - Frames per second for gif output (default: 20)
+- `gifScale` - Scale for gif output (default: 720)
 - `fps` - Frames per second for video output (default: 60)
 - `mp4` - Generate mp4 video and save to file
 - `avi` - Generate avi video and save to file
