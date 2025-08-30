@@ -24,7 +24,7 @@ async function initRecorder(interactions: TerminalInteraction[], snapshot: Termi
       height,
     },
     aspectRatio: `${width}:${height}`,
-    followNewTab: false,
+    ffmpeg_Path: options.ffmpeg,
   })
 
   return { recorder, page, browser, body }

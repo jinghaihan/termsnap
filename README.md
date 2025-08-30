@@ -5,7 +5,7 @@
 [![JSDocs][jsdocs-src]][jsdocs-href]
 [![License][license-src]][license-href]
 
-Creates beautiful screenshots of terminal command output with full local font and emoji support.
+Creates beautiful screenshots, videos, and GIFs based on terminal command output. With full local font and emoji support.
 
 ```sh
 npx termsnap "lolcat -f <(figlet -f banner3 termsnap)"
