@@ -39,6 +39,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
 
   options.cwd = options.cwd || process.cwd()
   options.open = options.open || (!html && !video && !screenshot && !options.gif)
+  options.compare = options.compare ?? true
 
   // html
   options.html = normalizeFileExt('html', options.html)
