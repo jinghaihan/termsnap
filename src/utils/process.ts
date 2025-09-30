@@ -55,7 +55,7 @@ function cleanAnsi(raw: string, terminal: string) {
 
 async function getTerminalDimensions(ansi: string, options: ConfigOptions) {
   const terminalAnsi = await getTerminalOutput(ansi)
-  const cleanedAnsi = cleanAnsi(ansi, terminalAnsi)
+  const cleanedAnsi = options.compare ? cleanAnsi(ansi, terminalAnsi) : terminalAnsi
 
   const rawText = stripAnsi(cleanedAnsi)
   const raw = splitToLines(rawText)

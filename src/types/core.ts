@@ -93,6 +93,10 @@ export interface CommonOptions {
    * FFmpeg path
    */
   ffmpeg?: string
+  /**
+   * Compare raw output with terminal output
+   */
+  compare?: boolean
 }
 
 export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeConfig, 'boxShadow' | 'padding' | 'margin'> {
