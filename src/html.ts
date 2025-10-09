@@ -24,24 +24,101 @@ function generateHTMLDoc(options: ConfigOptions, props: GenerateHTMLDocOptions) 
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${options.command}</title>
       <style>
-        :root {
-          --ansi-dim-opacity: 1;
-          --ansi-black: ${options.theme.black};
-          --ansi-red: ${options.theme.red};
-          --ansi-green: ${options.theme.green};
-          --ansi-yellow: ${options.theme.yellow};
-          --ansi-blue: ${options.theme.blue};
-          --ansi-magenta: ${options.theme.magenta};
-          --ansi-cyan: ${options.theme.cyan};
-          --ansi-white: ${options.theme.white};
-          --ansi-bright-black: ${options.theme.brightBlack};
-          --ansi-bright-red: ${options.theme.brightRed};
-          --ansi-bright-green: ${options.theme.brightGreen};
-          --ansi-bright-yellow: ${options.theme.brightYellow};
-          --ansi-bright-blue: ${options.theme.brightBlue};
-          --ansi-bright-magenta: ${options.theme.brightMagenta};
-          --ansi-bright-cyan: ${options.theme.brightCyan};
-          --ansi-bright-white: ${options.theme.brightWhite};
+        .ansi-black-fg {
+          color: ${options.theme.black};
+        }
+        .ansi-red-fg {
+          color: ${options.theme.red};
+        }
+        .ansi-green-fg {
+          color: ${options.theme.green};
+        }
+        .ansi-yellow-fg {
+          color: ${options.theme.yellow};
+        }
+        .ansi-blue-fg {
+          color: ${options.theme.blue};
+        }
+        .ansi-magenta-fg {
+          color: ${options.theme.magenta};
+        }
+        .ansi-cyan-fg {
+          color: ${options.theme.cyan};
+        }
+        .ansi-white-fg {
+          color: ${options.theme.white};
+        }
+        .ansi-bright-black-fg {
+          color: ${options.theme.brightBlack};
+        }
+        .ansi-bright-red-fg {
+          color: ${options.theme.brightRed};
+        }
+        .ansi-bright-green-fg {
+          color: ${options.theme.brightGreen};
+        }
+        .ansi-bright-yellow-fg {
+          color: ${options.theme.brightYellow};
+        }
+        .ansi-bright-blue-fg {
+          color: ${options.theme.brightBlue};
+        }
+        .ansi-bright-magenta-fg {
+          color: ${options.theme.brightMagenta};
+        }
+        .ansi-bright-cyan-fg {
+          color: ${options.theme.brightCyan};
+        }
+        .ansi-bright-white-fg {
+          color: ${options.theme.brightWhite};
+        }
+        .ansi-black-bg {
+          background-color: ${options.theme.black};
+        }
+        .ansi-red-bg {
+          background-color: ${options.theme.red};
+        }
+        .ansi-green-bg {
+          background-color: ${options.theme.green};
+        }
+        .ansi-yellow-bg {
+          background-color: ${options.theme.yellow};
+        }
+        .ansi-blue-bg {
+          background-color: ${options.theme.blue};
+        }
+        .ansi-magenta-bg {
+          background-color: ${options.theme.magenta};
+        }
+        .ansi-cyan-bg {
+          background-color: ${options.theme.cyan};
+        }
+        .ansi-white-bg {
+          background-color: ${options.theme.white};
+        }
+        .ansi-bright-black-bg {
+          background-color: ${options.theme.brightBlack};
+        }
+        .ansi-bright-red-bg {
+          background-color: ${options.theme.brightRed};
+        }
+        .ansi-bright-green-bg {
+          background-color: ${options.theme.brightGreen};
+        }
+        .ansi-bright-yellow-bg {
+          background-color: ${options.theme.brightYellow};
+        }
+        .ansi-bright-blue-bg {
+          background-color: ${options.theme.brightBlue};
+        }
+        .ansi-bright-magenta-bg {
+          background-color: ${options.theme.brightMagenta};
+        }
+        .ansi-bright-cyan-bg {
+          background-color: ${options.theme.brightCyan};
+        }
+        .ansi-bright-white-bg {
+          background-color: ${options.theme.brightWhite};
         }
         body {
           margin: 0;

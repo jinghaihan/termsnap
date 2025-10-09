@@ -54,7 +54,6 @@ try {
     .option('--open-replay', 'Open the browser after generating the animated HTML template', { default: false })
     .option('--force', 'Force to download the theme from remote', { default: false })
     .option('--ffmpeg <ffmpeg>', 'FFmpeg path')
-    .option('compare', 'Compare raw output with terminal output', { default: true })
     .action(async (command: string, options: CommandOptions) => {
       p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
 

@@ -1,11 +1,13 @@
 import type { ConfigOptions, TerminalInteraction, TerminalSnapshot } from '../types'
-import { FancyAnsi, stripAnsi } from 'fancy-ansi'
+import { AnsiUp } from 'ansi_up'
 import stringWidth from 'string-width'
+import stripAnsi from 'strip-ansi'
 import { calculateContainerDimensions } from './dimensions'
 import { getTerminalOutput } from './pty'
 import { prependTypedEffect } from './typed'
 
-const fancyAnsi = new FancyAnsi()
+const ansiUp = new AnsiUp()
+ansiUp.use_classes = true
 
 function splitToLines(text: string): string[] {
   return text.split(/\r?\n/)
@@ -16,46 +18,17 @@ function ansiToHTML(ansi: string, options: ConfigOptions): string {
     .map((line) => {
       if (!line)
         return `<div class="terminal-line">&#8203;</div>`
-      return `<div class="terminal-line">${fancyAnsi.toHtml(line)}</div>`
+      return `<div class="terminal-line">${ansiUp.ansi_to_html(line)}</div>`
     })
     .join('')
 
   return options.cmd
-    ? `<div class="terminal-line"><span style="color:var(--ansi-green, #4e9a06);">➜</span> ${options.command}</div>${html}`
+    ? `<div class="terminal-line"><span class="ansi-green-fg">➜</span> ${options.command}</div>${html}`
     : html
 }
 
-function cleanAnsi(raw: string, terminal: string) {
-  const strippedRaw = stripAnsi(raw)
-  const strippedTerminal = stripAnsi(terminal)
-
-  const rawLines = splitToLines(raw)
-  const strippedRawLines = splitToLines(strippedRaw)
-  const strippedTerminalLines = splitToLines(strippedTerminal)
-
-  // Find lines that exist in raw but not in terminal output
-  const linesToKeep: number[] = []
-  let index = 0
-
-  for (let rawIndex = 0; rawIndex < strippedRawLines.length; rawIndex++) {
-    const rawLine = strippedRawLines[rawIndex]
-
-    // Check if this line exists in terminal output
-    if (index < strippedTerminalLines.length
-      && rawLine === strippedTerminalLines[index]) {
-      linesToKeep.push(rawIndex)
-      index++
-    }
-  }
-
-  // Reconstruct the cleaned ANSI string with only the lines that match terminal output
-  const cleanedLines = linesToKeep.map(index => rawLines[index])
-  return cleanedLines.join('\n')
-}
-
 async function getTerminalDimensions(ansi: string, options: ConfigOptions) {
-  const terminalAnsi = await getTerminalOutput(ansi)
-  const cleanedAnsi = options.compare ? cleanAnsi(ansi, terminalAnsi) : terminalAnsi
+  const cleanedAnsi = await getTerminalOutput(ansi)
 
   const rawText = stripAnsi(cleanedAnsi)
   const raw = splitToLines(rawText)
