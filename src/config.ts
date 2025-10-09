@@ -88,6 +88,9 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   merged.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
   merged.typedOptions = { ...DEFAULT_TYPED_OPTIONS, ...merged.typedOptions }
 
+  // character width (approximate for monospace fonts)
+  merged.fontAspectRatio = merged.fontAspectRatio ? Number(merged.fontAspectRatio) : 0.6
+
   // font config
   themeConfig.font.fontFamily = merged.fontFamily || themeConfig.font.fontFamily
   themeConfig.font.fontSize = merged.fontSize || themeConfig.font.fontSize

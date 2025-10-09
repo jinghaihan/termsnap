@@ -113,6 +113,10 @@ export interface AppearanceOptions extends FontConfig, BorderConfig, Pick<ThemeC
    */
   width?: number
   /**
+   * Terminal font aspect ratio
+   */
+  fontAspectRatio?: number
+  /**
    * Show command in the terminal
    */
   cmd?: boolean
@@ -141,7 +145,7 @@ export interface TypedOptions {
   pauseAfter?: number
 }
 
-export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'decoration' | 'cmd' | 'typed'> {
+export interface Options extends CommonOptions, ThemeConfig, Pick<AppearanceOptions, 'height' | 'width' | 'fontAspectRatio' | 'decoration' | 'cmd' | 'typed'> {
   typedOptions?: TypedOptions
 }
 

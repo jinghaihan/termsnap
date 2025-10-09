@@ -142,6 +142,7 @@ export default defineConfig({
 - `typed` - Typed command in the terminal
 
 ### Font Configuration
+- `fontAspectRatio` - Terminal font aspect ratio (default: 0.6)
 - `fontFamily` - Terminal font family
 - `fontSize` - Terminal font size
 - `fontWeight` - Terminal font weight

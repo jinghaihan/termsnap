@@ -25,6 +25,7 @@ try {
     .option('--decoration', 'Draw window decorations (minimize, maximize, and close button).', { default: false })
     .option('--width <width>', 'Terminal width')
     .option('--height <height>', 'Terminal height')
+    .option('--font-aspect-ratio <ratio>', 'Terminal font aspect ratio', { default: 0.6 })
     .option('--font-family <font-family>', 'Terminal font family', { default: 'monospace' })
     .option('--font-size <font-size>', 'Terminal font size', { default: 14 })
     .option('--font-weight <font-weight>', 'Terminal font weight', { default: 400 })
