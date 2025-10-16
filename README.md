@@ -161,6 +161,21 @@ export default defineConfig({
 - `initialDelay` - Initial delay before starting to type
 - `pauseAfter` - Pause after typing completes
 
+## Cache Management
+
+termsnap caches downloaded binaries and remote themes to improve performance. You can manage the cache using the following command:
+
+```sh
+# Clean all cached files (binaries and themes)
+npx termsnap cache:clean
+```
+
+This command will remove:
+- Downloaded Go binaries used for terminal session capture
+- Cached remote themes from iTerm2-Color-Schemes repository
+
+Use this command if you're experiencing issues with cached files or want to free up disk space.
+
 ## Acknowledgments
 
 This project was inspired by:
