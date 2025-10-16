@@ -37,4 +37,5 @@ export default defineConfig({
       ],
     },
   ]),
+  postRun: 'eslint --fix .',
 })

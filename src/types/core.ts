@@ -171,3 +171,9 @@ export interface TerminalSnapshot {
   height: number
   timestamp?: number
 }
+
+export interface CleanCommandOptions {
+  bin?: boolean
+  theme?: boolean
+  keep?: boolean
+}

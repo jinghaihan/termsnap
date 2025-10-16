@@ -61,6 +61,7 @@
     "puppeteer-core": "catalog:browser",
     "puppeteer-screen-recorder": "catalog:browser",
     "rimraf": "catalog:node",
+    "tinyglobby": "catalog:node",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
   },

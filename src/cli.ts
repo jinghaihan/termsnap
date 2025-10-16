@@ -1,11 +1,12 @@
 import type { CAC } from 'cac'
-import type { CommandOptions } from './types'
+import type { CleanCommandOptions, CommandOptions } from './types'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
 import restoreCursor from 'restore-cursor'
 import { rimraf } from 'rimraf'
+import { glob } from 'tinyglobby'
 import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { BINARY_STORAGE_DIR, THEME_CACHE_DIR } from './constants'
@@ -129,17 +130,33 @@ try {
 
   cli
     .command('cache:clean', 'Clean cached files (binaries and themes)')
-    .action(async () => {
+    .option('--bin', 'Clean binary cache', { default: true })
+    .option('--theme', 'Clean theme cache', { default: true })
+    .option('--keep', 'Keep current version binary cache', { default: true })
+    .action(async (options: CleanCommandOptions) => {
       intro()
 
       const spinner = p.spinner()
       spinner.start('Cleaning cache...')
 
-      spinner.message('Cleaning binary cache...')
-      await rimraf(BINARY_STORAGE_DIR)
+      if (options.bin) {
+        spinner.message('Cleaning binary cache...')
+        if (!options.keep) {
+          await rimraf(BINARY_STORAGE_DIR)
+        }
+        else {
+          const binaries = await glob(`${BINARY_STORAGE_DIR}/**`)
+          for (const binary of binaries) {
+            if (!binary.includes(`-v${VERSION}-`))
+              await rimraf(binary)
+          }
+        }
+      }
 
-      spinner.message('Cleaning theme cache...')
-      await rimraf(THEME_CACHE_DIR)
+      if (options.theme) {
+        spinner.message('Cleaning theme cache...')
+        await rimraf(THEME_CACHE_DIR)
+      }
 
       spinner.stop('Cleaning completed')
       p.outro(c.green`Done!`)
