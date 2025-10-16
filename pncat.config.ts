@@ -29,6 +29,7 @@ export default defineConfig({
       match: [
         /get-port/,
         /kill-port/,
+        /restore-cursor/,
         /string-width/,
         /ansi_up/,
         /strip-ansi/,

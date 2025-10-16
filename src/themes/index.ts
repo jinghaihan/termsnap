@@ -1,10 +1,10 @@
 import type { BuiltinTheme, ThemeConfig, VscodeTerminalConfig } from '../types'
 import { existsSync } from 'node:fs'
-import { access, constants, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
-import { join } from 'pathe'
+import { basename, join } from 'pathe'
 import { BUILTIN_THEME_CHOICES, THEME_CACHE_DIR } from '../constants'
 import { convertToColorTheme } from './converter'
 
@@ -47,7 +47,6 @@ async function loadRemoteTheme(themeName: string, force: boolean): Promise<Theme
   let themeData: VscodeTerminalConfig
   try {
     if (existsSync(cachePath) && !force) {
-      await access(cachePath, constants.F_OK)
       const cachedData = await readFile(cachePath, 'utf-8')
       themeData = JSON.parse(cachedData)
     }
@@ -71,11 +70,12 @@ async function loadRemoteTheme(themeName: string, force: boolean): Promise<Theme
 
 async function downloadRemoteTheme(url: string, cachePath: string): Promise<VscodeTerminalConfig> {
   const spinner = p.spinner()
-  spinner.start(`Downloading theme from ${c.yellow(url)}...`)
+  const themeName = basename(cachePath)
+  spinner.start(`Downloading theme ${c.yellow(themeName)}`)
 
   const response = await fetch(url)
   if (!response.ok) {
-    spinner.stop(c.red(`Failed to download theme from ${c.yellow(url)}`))
+    spinner.stop(c.red(`Failed to download theme ${c.yellow(themeName)}`))
     throw new Error(String(response))
   }
 
@@ -84,7 +84,7 @@ async function downloadRemoteTheme(url: string, cachePath: string): Promise<Vsco
   await mkdir(THEME_CACHE_DIR, { recursive: true })
   await writeFile(cachePath, JSON.stringify(data, null, 2))
 
-  spinner.stop('Theme downloaded successfully')
+  spinner.stop(`Theme ${c.yellow(themeName)} downloaded successfully`)
   return data
 }
 

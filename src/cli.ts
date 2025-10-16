@@ -4,11 +4,12 @@ import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
+import restoreCursor from 'restore-cursor'
 import { rimraf } from 'rimraf'
-import { name, version } from '../package.json'
 import { openInBroz } from './browser'
 import { resolveConfig } from './config'
 import { BINARY_STORAGE_DIR, THEME_CACHE_DIR } from './constants'
+import { NAME, VERSION } from './constants/env'
 import { GoSession } from './go-session'
 import { generateAnimatedHTML, generateHTML } from './html'
 import { generateGIF, generateVideo } from './recorder'
@@ -16,7 +17,7 @@ import { generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
 
 function intro(): void {
-  p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
+  p.intro(`${c.yellow`${NAME} `}${c.dim`v${VERSION}`}`)
 }
 
 try {
@@ -145,8 +146,10 @@ try {
     })
 
   cli.help()
-  cli.version(version)
+  cli.version(VERSION)
   cli.parse()
+
+  restoreCursor()
 }
 catch (error) {
   console.error(error)

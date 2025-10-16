@@ -83,7 +83,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const config = await loader.load()
   const configOptions = config.sources.length ? normalizeConfig(config.config) : {}
   const merged = { ...configOptions, ...options }
-  const themeConfig = await loadTheme(options.theme, options.force) as DeepRequired<ThemeConfig>
+  const themeConfig = await loadTheme(merged.theme, options.force) as DeepRequired<ThemeConfig>
 
   merged.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
   merged.typedOptions = { ...DEFAULT_TYPED_OPTIONS, ...merged.typedOptions }

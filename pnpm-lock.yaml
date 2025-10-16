@@ -104,6 +104,9 @@ catalogs:
     kill-port:
       specifier: 1.6.1
       version: 1.6.1
+    restore-cursor:
+      specifier: ^5.1.0
+      version: 5.1.0
     string-width:
       specifier: ^8.1.0
       version: 8.1.0
@@ -127,24 +130,12 @@ importers:
       '@xterm/headless':
         specifier: catalog:terminal
         version: 5.5.0
-      ansi_up:
-        specifier: catalog:utils
-        version: 6.0.6
-      ansis:
-        specifier: catalog:node
-        version: 4.2.0
       cac:
         specifier: catalog:node
         version: 6.7.14
       execa:
         specifier: catalog:node
         version: 9.6.0
-      get-port:
-        specifier: catalog:utils
-        version: 7.1.0
-      kill-port:
-        specifier: catalog:utils
-        version: 1.6.1
       pathe:
         specifier: catalog:node
         version: 2.0.3
@@ -157,12 +148,6 @@ importers:
       rimraf:
         specifier: catalog:node
         version: 6.0.1
-      string-width:
-        specifier: catalog:utils
-        version: 8.1.0
-      strip-ansi:
-        specifier: catalog:utils
-        version: 7.1.2
       unconfig:
         specifier: catalog:node
         version: 7.3.3
@@ -182,21 +167,42 @@ importers:
       '@types/ws':
         specifier: catalog:types
         version: 8.18.1
+      ansi_up:
+        specifier: catalog:utils
+        version: 6.0.6
+      ansis:
+        specifier: catalog:node
+        version: 4.2.0
       bumpp:
         specifier: catalog:cli
         version: 10.3.1
       eslint:
         specifier: catalog:lint
         version: 9.37.0(jiti@2.5.1)
+      get-port:
+        specifier: catalog:utils
+        version: 7.1.0
+      kill-port:
+        specifier: catalog:utils
+        version: 1.6.1
       lint-staged:
         specifier: catalog:lint
         version: 16.2.4
       pncat:
         specifier: catalog:cli
         version: 0.7.0
+      restore-cursor:
+        specifier: catalog:utils
+        version: 5.1.0
       simple-git-hooks:
         specifier: catalog:lint
         version: 2.13.1
+      string-width:
+        specifier: catalog:utils
+        version: 8.1.0
+      strip-ansi:
+        specifier: catalog:utils
+        version: 7.1.2
       taze:
         specifier: catalog:cli
         version: 19.7.0

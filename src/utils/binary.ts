@@ -7,8 +7,8 @@ import * as p from '@clack/prompts'
 import c from 'ansis'
 import { execa } from 'execa'
 import { join } from 'pathe'
-import { version } from '../../package.json'
 import { BINARY_STORAGE_DIR, DEV_MODE } from '../constants'
+import { VERSION } from '../constants/env'
 
 export async function getGoServerCommand(port: number): Promise<{ command: string, args: string[] }> {
   if (DEV_MODE) {
@@ -44,7 +44,7 @@ async function getBinaryPath(): Promise<string> {
 function getBinaryInfo(): BinaryInfo {
   const name = getBinaryName()
   const path = join(BINARY_STORAGE_DIR, name)
-  const url = `https://github.com/jinghaihan/termsnap/releases/download/v${version}/${name}`
+  const url = `https://github.com/jinghaihan/termsnap/releases/download/v${VERSION}/${name}`
 
   return { name, url, path }
 }
@@ -54,11 +54,11 @@ function getBinaryName(): string {
   const archName = arch()
 
   if (platformName === 'darwin')
-    return archName === 'arm64' ? `termsnap-v${version}-darwin-arm64` : `termsnap-v${version}-darwin-x64`
+    return archName === 'arm64' ? `termsnap-v${VERSION}-darwin-arm64` : `termsnap-v${VERSION}-darwin-x64`
   if (platformName === 'linux')
-    return archName === 'arm64' ? `termsnap-v${version}-linux-arm64` : `termsnap-v${version}-linux-x64`
+    return archName === 'arm64' ? `termsnap-v${VERSION}-linux-arm64` : `termsnap-v${VERSION}-linux-x64`
   if (platformName === 'win32')
-    return `termsnap-v${version}-win32-x64.exe`
+    return `termsnap-v${VERSION}-win32-x64.exe`
 
   p.outro(c.red`Unsupported platform: ${platformName}`)
   process.exit(1)

@@ -5,18 +5,18 @@ import process from 'node:process'
 import c from 'ansis'
 import { execa } from 'execa'
 import { join } from 'pathe'
-import { version } from '../package.json'
+import { VERSION } from '../src/constants'
 
 const builds = [
-  { os: 'darwin', arch: 'amd64', output: `termsnap-v${version}-darwin-x64` },
-  { os: 'darwin', arch: 'arm64', output: `termsnap-v${version}-darwin-arm64` },
-  { os: 'linux', arch: 'amd64', output: `termsnap-v${version}-linux-x64` },
-  { os: 'linux', arch: 'arm64', output: `termsnap-v${version}-linux-arm64` },
-  { os: 'windows', arch: 'amd64', output: `termsnap-v${version}-win32-x64.exe` },
+  { os: 'darwin', arch: 'amd64', output: `termsnap-v${VERSION}-darwin-x64` },
+  { os: 'darwin', arch: 'arm64', output: `termsnap-v${VERSION}-darwin-arm64` },
+  { os: 'linux', arch: 'amd64', output: `termsnap-v${VERSION}-linux-x64` },
+  { os: 'linux', arch: 'arm64', output: `termsnap-v${VERSION}-linux-arm64` },
+  { os: 'windows', arch: 'amd64', output: `termsnap-v${VERSION}-win32-x64.exe` },
 ]
 
 async function buildGo() {
-  console.log(`${c.cyan`Building Go binaries for all platforms (v${version})...`}`)
+  console.log(`${c.cyan`Building Go binaries for all platforms (v${VERSION})...`}`)
   await mkdir('binaries', { recursive: true })
 
   for (const build of builds) {
