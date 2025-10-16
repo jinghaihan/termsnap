@@ -4,14 +4,20 @@ import process from 'node:process'
 import * as p from '@clack/prompts'
 import c from 'ansis'
 import { cac } from 'cac'
+import { rimraf } from 'rimraf'
 import { name, version } from '../package.json'
 import { openInBroz } from './browser'
 import { resolveConfig } from './config'
+import { BINARY_STORAGE_DIR, THEME_CACHE_DIR } from './constants'
 import { GoSession } from './go-session'
 import { generateAnimatedHTML, generateHTML } from './html'
 import { generateGIF, generateVideo } from './recorder'
 import { generateScreenshot } from './screenshot'
 import { processTerminalOutputs } from './utils/process'
+
+function intro(): void {
+  p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
+}
 
 try {
   const cli: CAC = cac('termsnap')
@@ -56,7 +62,7 @@ try {
     .option('--force', 'Force to download the theme from remote', { default: false })
     .option('--ffmpeg <ffmpeg>', 'FFmpeg path')
     .action(async (command: string, options: CommandOptions) => {
-      p.intro(`${c.yellow`${name} `}${c.dim`v${version}`}`)
+      intro()
 
       const config = await resolveConfig(command, options)
       const outputHTML = !!config.html
@@ -118,6 +124,24 @@ try {
         p.outro(c.red(error instanceof Error ? error.message : String(error)))
         await handleExit(1)
       }
+    })
+
+  cli
+    .command('cache:clean', 'Clean cached files (binaries and themes)')
+    .action(async () => {
+      intro()
+
+      const spinner = p.spinner()
+      spinner.start('Cleaning cache...')
+
+      spinner.message('Cleaning binary cache...')
+      await rimraf(BINARY_STORAGE_DIR)
+
+      spinner.message('Cleaning theme cache...')
+      await rimraf(THEME_CACHE_DIR)
+
+      spinner.stop('Cleaning completed')
+      p.outro(c.green`Done!`)
     })
 
   cli.help()

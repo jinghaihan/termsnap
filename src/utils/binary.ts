@@ -54,11 +54,11 @@ function getBinaryName(): string {
   const archName = arch()
 
   if (platformName === 'darwin')
-    return archName === 'arm64' ? 'termsnap-darwin-arm64' : 'termsnap-darwin-x64'
+    return archName === 'arm64' ? `termsnap-v${version}-darwin-arm64` : `termsnap-v${version}-darwin-x64`
   if (platformName === 'linux')
-    return archName === 'arm64' ? 'termsnap-linux-arm64' : 'termsnap-linux-x64'
+    return archName === 'arm64' ? `termsnap-v${version}-linux-arm64` : `termsnap-v${version}-linux-x64`
   if (platformName === 'win32')
-    return 'termsnap-win32-x64.exe'
+    return `termsnap-v${version}-win32-x64.exe`
 
   p.outro(c.red`Unsupported platform: ${platformName}`)
   process.exit(1)

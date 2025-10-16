@@ -17,23 +17,23 @@ jobs:
           - os: ubuntu-latest
             platform: linux
             arch: amd64
-            binary_name: termsnap-linux-x64
+            binary_name: termsnap-${{ github.ref_name }}-linux-x64
           - os: ubuntu-latest
             platform: linux
             arch: arm64
-            binary_name: termsnap-linux-arm64
+            binary_name: termsnap-${{ github.ref_name }}-linux-arm64
           - os: macos-latest
             platform: darwin
             arch: amd64
-            binary_name: termsnap-darwin-x64
+            binary_name: termsnap-${{ github.ref_name }}-darwin-x64
           - os: macos-latest
             platform: darwin
             arch: arm64
-            binary_name: termsnap-darwin-arm64
+            binary_name: termsnap-${{ github.ref_name }}-darwin-arm64
           - os: windows-latest
             platform: windows
             arch: amd64
-            binary_name: termsnap-win32-x64.exe
+            binary_name: termsnap-${{ github.ref_name }}-win32-x64.exe
 
     steps:
       - name: Checkout code
