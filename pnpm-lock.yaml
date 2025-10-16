@@ -115,7 +115,8 @@ catalogs:
       version: 7.1.2
 
 overrides:
-  '@ffmpeg-installer/ffmpeg': 1.1.0
+  '@ffmpeg-installer/ffmpeg': ^1.1.0
+  puppeteer: ^24.25.0
 
 importers:
 
@@ -220,7 +221,7 @@ importers:
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.8.0)(jiti@2.5.1)(tsx@4.20.6)(yaml@2.8.1)
     optionalDependencies:
       '@ffmpeg-installer/ffmpeg':
-        specifier: 1.1.0
+        specifier: ^1.1.0
         version: 1.1.0
 
 packages:
@@ -2736,7 +2737,7 @@ packages:
     resolution: {integrity: sha512-yzWlXWGi/FjsAe0fVr/zYlKFKsH1PGc6Pm7t58wlzVbs/jdLimjdO5VaTIqDJIkWuXFfD4WuDFptdU6AG3ls/Q==}
     engines: {node: '>=16'}
     peerDependencies:
-      puppeteer: 19.0.0
+      puppeteer: ^24.25.0
 
   puppeteer@19.0.0:
     resolution: {integrity: sha512-3Ga5IVerQQ2hKU9q7T28RmcUsd8F2kL6cYuPcPCzeclSjmHhGydPBZL/KJKC02sG6J6Wfry85uiWpbkjQ5qBiw==}
