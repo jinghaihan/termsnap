@@ -72,15 +72,15 @@ jobs:
           pattern: termsnap-*
           merge-multiple: true
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set node
         uses: actions/setup-node@v5
         with:
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
           node-version: lts/*
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
 
       - run: npx changelogithub
         continue-on-error: true
