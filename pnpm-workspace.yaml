@@ -1,47 +1,48 @@
 packages: []
 catalogs:
-  browser:
-    puppeteer-core: ^24.25.0
-    puppeteer-screen-recorder: ^3.0.6
   build:
     unbuild: ^3.6.1
   cli:
     bumpp: ^10.3.1
-    pncat: ^0.7.0
-    taze: ^19.7.0
+    pncat: ^0.7.4
+    taze: ^19.9.0
   ffmpeg:
     '@ffmpeg-installer/ffmpeg': ^1.1.0
   lint:
-    '@antfu/eslint-config': ^6.0.0
-    eslint: ^9.37.0
-    lint-staged: ^16.2.4
+    '@antfu/eslint-config': ^6.2.0
+    eslint: ^9.39.0
+    lint-staged: ^16.2.6
     simple-git-hooks: ^2.13.1
   network:
     ws: ^8.18.3
   node:
     '@clack/prompts': ^0.11.0
-    ansis: ^4.2.0
     cac: ^6.7.14
     execa: ^9.6.0
     pathe: ^2.0.3
-    rimraf: ^6.0.1
+    rimraf: ^6.1.0
     tinyglobby: ^0.2.15
     unconfig: ^7.3.3
+  puppeteer:
+    puppeteer-core: ^24.27.0
+    puppeteer-screen-recorder: ^3.0.6
   script:
     tsx: ^4.20.6
   terminal:
     '@xterm/addon-serialize': ^0.13.0
     '@xterm/headless': ^5.5.0
   test:
-    vitest: ^3.2.4
+    vitest: ^4.0.6
   tsc:
     typescript: ^5.9.3
   types:
     '@types/kill-port': ^2.0.3
-    '@types/node': ^24.8.0
+    '@types/node': ^24.10.0
     '@types/ws': ^8.18.1
   utils:
+    '@antfu/install-pkg': ^1.1.0
     ansi_up: ^6.0.6
+    ansis: ^4.2.0
     get-port: ^7.1.0
     kill-port: 1.6.1
     restore-cursor: ^5.1.0

@@ -2,7 +2,7 @@
   "name": "termsnap",
   "type": "module",
   "version": "0.4.4",
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@10.20.0",
   "description": "📸 Creates beautiful screenshots, videos, and GIFs based on terminal command output.",
   "author": "jinghaihan",
   "license": "MIT",
@@ -51,22 +51,23 @@
     "preinstall": "npx only-allow pnpm",
     "prepublishOnly": "pnpm build"
   },
+  "peerDependencies": {
+    "@ffmpeg-installer/ffmpeg": "catalog:ffmpeg"
+  },
   "dependencies": {
+    "@antfu/install-pkg": "catalog:utils",
     "@clack/prompts": "catalog:node",
     "@xterm/addon-serialize": "catalog:terminal",
     "@xterm/headless": "catalog:terminal",
     "cac": "catalog:node",
     "execa": "catalog:node",
     "pathe": "catalog:node",
-    "puppeteer-core": "catalog:browser",
-    "puppeteer-screen-recorder": "catalog:browser",
+    "puppeteer-core": "catalog:puppeteer",
+    "puppeteer-screen-recorder": "catalog:puppeteer",
     "rimraf": "catalog:node",
     "tinyglobby": "catalog:node",
     "unconfig": "catalog:node",
     "ws": "catalog:network"
-  },
-  "optionalDependencies": {
-    "@ffmpeg-installer/ffmpeg": "catalog:ffmpeg"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:lint",
@@ -74,7 +75,7 @@
     "@types/node": "catalog:types",
     "@types/ws": "catalog:types",
     "ansi_up": "catalog:utils",
-    "ansis": "catalog:node",
+    "ansis": "catalog:utils",
     "bumpp": "catalog:cli",
     "eslint": "catalog:lint",
     "get-port": "catalog:utils",
@@ -91,14 +92,10 @@
     "unbuild": "catalog:build",
     "vitest": "catalog:test"
   },
-  "resolutions": {
-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
-    "puppeteer": "^24.25.0"
-  },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,mjs,mts}": "eslint --fix"
+    "*": "eslint --fix"
   }
 }

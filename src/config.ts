@@ -122,6 +122,9 @@ async function getFFmpegPath(options: Partial<CommandOptions>) {
     return options.ffmpeg
 
   try {
+    const { installPackage } = await import('@antfu/install-pkg')
+    await installPackage('@ffmpeg-installer/ffmpeg')
+
     const { default: ffmpeg } = await import('@ffmpeg-installer/ffmpeg')
     return ffmpeg.path
   }

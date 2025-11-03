@@ -6,7 +6,7 @@ export default defineConfig({
   },
   catalogRules: mergeCatalogRules([
     {
-      name: 'browser',
+      name: 'puppeteer',
       match: [/puppeteer/],
       priority: 0,
     },
@@ -27,12 +27,11 @@ export default defineConfig({
     {
       name: 'utils',
       match: [
-        /get-port/,
-        /kill-port/,
+        '@antfu/install-pkg',
+        /port/,
         /restore-cursor/,
         /string-width/,
-        /ansi_up/,
-        /strip-ansi/,
+        /ansi/,
         /html-format/,
       ],
     },

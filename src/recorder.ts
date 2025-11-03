@@ -72,30 +72,24 @@ async function generateWEBM(interactions: TerminalInteraction[], snapshot: Termi
 }
 
 export async function generateVideo(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
-  if (options.mp4) {
+  if (options.mp4)
     await generateMP4(interactions, snapshot, options)
-  }
-  if (options.avi) {
+  if (options.avi)
     await generateAVI(interactions, snapshot, options)
-  }
-  if (options.mov) {
+  if (options.mov)
     await generateMOV(interactions, snapshot, options)
-  }
-  if (options.webm) {
+  if (options.webm)
     await generateWEBM(interactions, snapshot, options)
-  }
 }
 
 async function getVideoPath(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
   const videoPath = options.mp4 || options.avi || options.mov || options.webm
-  if (videoPath) {
+  if (videoPath)
     return { path: join(options.cwd, videoPath) }
-  }
-  else {
-    const tempVideo = `${options.gif}.mp4`
-    await generateMP4(interactions, snapshot, { ...options, mp4: tempVideo })
-    return { path: join(options.cwd, tempVideo), isTemp: true }
-  }
+
+  const tempVideo = `${options.gif}.mp4`
+  await generateMP4(interactions, snapshot, { ...options, mp4: tempVideo })
+  return { path: join(options.cwd, tempVideo), isTemp: true }
 }
 
 export async function generateGIF(interactions: TerminalInteraction[], snapshot: TerminalSnapshot, options: ConfigOptions) {
