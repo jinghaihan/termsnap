@@ -2,7 +2,7 @@ import type { CommandOptions, ConfigOptions, DeepRequired, ThemeConfig } from '.
 import process from 'node:process'
 import getPort, { portNumbers } from 'get-port'
 import { createConfigLoader } from 'unconfig'
-import { DEFAULT_TYPED_OPTIONS } from './constants'
+import { DEFAULT_TYPED_OPTIONS, PACKAGE_ROOT } from './constants'
 import { loadTheme } from './themes'
 
 function normalizeConfig(options: Partial<CommandOptions>) {
@@ -123,7 +123,11 @@ async function getFFmpegPath(options: Partial<CommandOptions>) {
 
   try {
     const { installPackage } = await import('@antfu/install-pkg')
-    await installPackage('@ffmpeg-installer/ffmpeg')
+    await installPackage('@ffmpeg-installer/ffmpeg', {
+      cwd: PACKAGE_ROOT,
+      silent: true,
+      preferOffline: true,
+    })
 
     const { default: ffmpeg } = await import('@ffmpeg-installer/ffmpeg')
     return ffmpeg.path
