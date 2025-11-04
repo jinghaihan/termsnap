@@ -9,6 +9,11 @@ export type BuiltinTheme = (typeof BUILTIN_THEME_CHOICES)[number]
 
 export interface CommandOptions extends CommonOptions, AppearanceOptions {
   typedOptions?: TypedOptions
+
+  // flat typed options
+  typedSpeed?: number
+  typedInitialDelay?: number
+  typedPauseAfter?: number
 }
 
 export interface CommonOptions {

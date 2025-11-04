@@ -21,6 +21,26 @@ function normalizeFileExt(ext: string, name?: string) {
   return name
 }
 
+async function getFFmpegPath(options: Partial<CommandOptions>) {
+  if (options.ffmpeg)
+    return options.ffmpeg
+
+  try {
+    const { installPackage } = await import('@antfu/install-pkg')
+    await installPackage('@ffmpeg-installer/ffmpeg', {
+      cwd: PACKAGE_ROOT,
+      silent: true,
+      preferOffline: true,
+    })
+
+    const { default: ffmpeg } = await import('@ffmpeg-installer/ffmpeg')
+    return ffmpeg.path
+  }
+  catch {
+    return 'ffmpeg'
+  }
+}
+
 export async function resolveConfig(command: string, options: Partial<CommandOptions>): Promise<ConfigOptions> {
   options = normalizeConfig(options)
 
@@ -86,7 +106,15 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
   const themeConfig = await loadTheme(merged.theme, options.force) as DeepRequired<ThemeConfig>
 
   merged.port = await getPort({ port: portNumbers(options.port, options.port + 100) })
+
+  // merge flat typed options
   merged.typedOptions = { ...DEFAULT_TYPED_OPTIONS, ...merged.typedOptions }
+  if (merged.typedSpeed)
+    merged.typedOptions.speed = merged.typedSpeed
+  if (merged.typedInitialDelay)
+    merged.typedOptions.initialDelay = merged.typedInitialDelay
+  if (merged.typedPauseAfter)
+    merged.typedOptions.pauseAfter = merged.typedPauseAfter
 
   // character width (approximate for monospace fonts)
   merged.fontAspectRatio = merged.fontAspectRatio ? Number(merged.fontAspectRatio) : 0.6
@@ -115,24 +143,4 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
     ...merged,
     ...themeConfig,
   } as ConfigOptions
-}
-
-async function getFFmpegPath(options: Partial<CommandOptions>) {
-  if (options.ffmpeg)
-    return options.ffmpeg
-
-  try {
-    const { installPackage } = await import('@antfu/install-pkg')
-    await installPackage('@ffmpeg-installer/ffmpeg', {
-      cwd: PACKAGE_ROOT,
-      silent: true,
-      preferOffline: true,
-    })
-
-    const { default: ffmpeg } = await import('@ffmpeg-installer/ffmpeg')
-    return ffmpeg.path
-  }
-  catch {
-    return 'ffmpeg'
-  }
 }
