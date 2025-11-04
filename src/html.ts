@@ -291,7 +291,7 @@ export async function generateAnimatedHTML(interactions: TerminalInteraction[], 
   if (save) {
     await saveHTML(html, {
       ...options,
-      html: options.replay,
+      html: options.animate,
     })
   }
   return html

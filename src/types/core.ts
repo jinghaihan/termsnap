@@ -72,7 +72,7 @@ export interface CommonOptions {
   /**
    * Generate animated HTML template and save to file
    */
-  replay?: string
+  animate?: string
   /**
    * Loop the animation for a given number of milliseconds
    */
@@ -81,10 +81,6 @@ export interface CommonOptions {
    * Open the browser after generating the HTML template
    */
   open?: boolean
-  /**
-   * Open the browser after generating the animated HTML template
-   */
-  openReplay?: boolean
   /**
    * Force to download the theme from remote, even if it's already cached
    */

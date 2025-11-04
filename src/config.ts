@@ -33,7 +33,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
     }
   }
 
-  const html = !!options.html || !!options.replay
+  const html = !!options.html || !!options.animate
   const screenshot = !!options.png || !!options.jpeg || !!options.webp
   const video = !!options.mp4 || !!options.avi || !!options.mov || !!options.webm
 
@@ -42,7 +42,7 @@ export async function resolveConfig(command: string, options: Partial<CommandOpt
 
   // html
   options.html = normalizeFileExt('html', options.html)
-  options.replay = normalizeFileExt('html', options.replay)
+  options.animate = normalizeFileExt('html', options.animate)
 
   // image
   options.png = normalizeFileExt('png', options.png)

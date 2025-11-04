@@ -23,7 +23,7 @@ This project leverages Go-based terminal output proxy combined with web renderin
 - **Local Font & Emoji Support**: Perfect rendering of your system fonts and emoji characters
 - **Customizable Themes**: Extensive theme customization through configuration files
 - **Multiple Output Formats**: Export as HTML, images (PNG/JPEG/WebP), animated GIFs, videos (MP4/AVI/MOV/WebM), or browser preview
-- **Replay Animation**: Generate animated HTML or video output with typing effects
+- **Animation**: Generate animated HTML or video output with typing effects
 
 <p align='center'>
 <img src='./assets/emoji.png' />
@@ -33,25 +33,25 @@ This project leverages Go-based terminal output proxy combined with web renderin
 
 ```sh
 # Browser preview
-npx termsnap "command" --open-replay
+npx termsnap "command" --animate --open
 
 # Save as HTML file
-npx termsnap "command" --html index
+npx termsnap "command" --html
 
 # Save as screenshot
-npx termsnap "command" --png image
+npx termsnap "command" --png
 
 # Save as video
-npx termsnap "command" --mp4 video --fps 60
+npx termsnap "command" --mp4 --fps 60
 
 # Save as animated GIF
-npx termsnap "command" --gif animation --gif-fps 20 --gif-scale 720
+npx termsnap "command" --gif --gif-fps 20 --gif-scale 720
 
 # Custom theme and decoration
-npx termsnap "command" --open --theme vitesse-light --decoration
+npx termsnap "command" --open --theme "vitesse-light" --decoration
 
 # Save as animated HTML file
-npx termsnap "command" --replay animated
+npx termsnap "command" --animate
 ```
 
 <p align='center'>
@@ -92,7 +92,7 @@ npx termsnap "command" --theme "0x96f"
 
 ## Animated Command Input
 
-When using the `--replay` option to generate animated HTML output, you can customize the typing animation behavior through `typedOptions` configuration:
+When using the `--animate` option to generate animated HTML output, you can customize the typing animation behavior through `typedOptions` configuration:
 
 ```typescript
 // termsnap.config.ts
@@ -127,10 +127,9 @@ export default defineConfig({
 - `mov` - Generate mov video and save to file
 - `webm` - Generate webm video and save to file
 - `html` - Generate HTML template and save to file
-- `replay` - Generate animated HTML template and save to file
+- `animate` - Generate animated HTML template and save to file
 - `loop` - Loop the animation for a given number of milliseconds
 - `open` - Open browser after generating HTML template
-- `openReplay` - Open browser after generating animated HTML template
 
 ### Terminal Styling
 - `theme` - Terminal theme (vitesse-dark, vitesse-light, catppuccin variants, etc.)

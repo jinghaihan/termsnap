@@ -57,10 +57,9 @@ try {
     .option('--mov [mov]', 'Generate a mov and save to file')
     .option('--webm [webm]', 'Generate a webm and save to file')
     .option('--html [html]', 'Generate HTML template and save to file')
-    .option('--replay [replay]', 'Generate animated HTML template and save to file')
+    .option('--animate [animate]', 'Generate animated HTML template and save to file')
     .option('--loop <loop>', 'Loop the animation for a given number of milliseconds')
     .option('--open', 'Open the browser after generating the HTML template', { default: false })
-    .option('--open-replay', 'Open the browser after generating the animated HTML template', { default: false })
     .option('--force', 'Force to download the theme from remote', { default: false })
     .option('--ffmpeg <ffmpeg>', 'FFmpeg path')
     .action(async (command: string, options: CommandOptions) => {
@@ -68,7 +67,7 @@ try {
 
       const config = await resolveConfig(command, options)
       const outputHTML = !!config.html
-      const outputReplayHTML = !!config.replay
+      const outputAnimateHTML = !!config.animate
       const outputScreenshot = !!config.screenshot
       const outputVideo = !!config.video
       const outputGIF = !!config.gif
@@ -99,7 +98,7 @@ try {
           await generateHTML(processed, config, true)
         }
 
-        if (outputReplayHTML) {
+        if (outputAnimateHTML) {
           await generateAnimatedHTML(result.interactions, config, true)
         }
 
